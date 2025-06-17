@@ -21,57 +21,45 @@ const ThemeToggle = () => {
   const theme = useStore(themeStore)
   const controlsSun = useAnimation()
   const controlsMoon = useAnimation()
-  const controlsSystem = useAnimation()
 
   useEffect(() => {
     setMounted(true)
-    const savedTheme = localStorage.getItem('theme') as 'light' | 'dark' | 'system'
-    themeStore.set(savedTheme || 'system')
+    const savedTheme = localStorage.getItem('theme') as 'light' | 'dark'
+    themeStore.set(savedTheme || 'light')
   }, [])
 
   useEffect(() => {
     if (!mounted) return
 
-    if (theme === 'system') {
-      controlsSun.start('hidden')
-      controlsSystem.start('visible')
-      controlsMoon.start('hidden')
-    } else {
-      controlsSun.start(theme === 'light' ? 'visible' : 'hidden')
-      controlsMoon.start(theme === 'dark' ? 'visible' : 'hidden')
-      controlsSystem.start('hidden')
-    }
+    controlsSun.start(theme === 'light' ? 'visible' : 'hidden')
+    controlsMoon.start(theme === 'dark' ? 'visible' : 'hidden')
 
     localStorage.setItem('theme', theme)
     applyTheme(theme)
-  }, [theme, mounted, controlsSun, controlsMoon, controlsSystem])
+  }, [theme, mounted, controlsSun, controlsMoon])
 
   const applyTheme = (newTheme: string) => {
     const root = document.documentElement
 
-    // 添加过渡类
+    // 테마 전환 클래스 추가
     root.classList.add('theme-transition')
 
-    const isDark = newTheme === 'dark' || (newTheme === 'system' && window.matchMedia('(prefers-color-scheme: dark)').matches)
+    const isDark = newTheme === 'dark'
     root.classList.toggle('dark', isDark)
 
-    // 移除过渡类
+    // 전환 클래스 제거
     setTimeout(() => {
       root.classList.remove('theme-transition')
     }, 300)
   }
 
   const handleClick = () => {
-    const themeMap = {
-      light: 'dark',
-      dark: 'system',
-      system: 'light',
-    }
-    themeStore.set(themeMap[theme] as 'light' | 'dark' | 'system')
+    const newTheme = theme === 'light' ? 'dark' : 'light'
+    themeStore.set(newTheme as 'light' | 'dark')
   }
 
   return (
-    <button onClick={handleClick} className="relative size-5 flex items-center justify-center cursor-pointer" aria-label="切换主题">
+    <button onClick={handleClick} className="relative size-5 flex items-center justify-center cursor-pointer" aria-label="테마 전환">
       <motion.div whileHover={{ scale: 1.05 }} whileTap={{ scale: 0.9 }} className="relative size-5 flex items-center justify-center">
         <motion.div
           className="absolute inset-0"
@@ -81,15 +69,6 @@ const ThemeToggle = () => {
           transition={{ duration: 0.2, ease: 'easeInOut' }}
         >
           <span className="icon-[f7--sun-max-fill] size-5"></span>
-        </motion.div>
-        <motion.div
-          className="absolute inset-0"
-          variants={iconVariants}
-          initial="hidden"
-          animate={controlsSystem}
-          transition={{ duration: 0.2, ease: 'easeInOut' }}
-        >
-          <span className="icon-[majesticons--monitor-line] size-5"></span>
         </motion.div>
         <motion.div
           className="absolute inset-0"
