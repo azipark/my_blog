@@ -87,8 +87,28 @@ export const SKILLSSHOWCASE_CONFIG: SkillsShowcaseConfig = {
           icon: 'icon-[mdi--language-html5]',
         },
         {
-          name: 'TypeScript',
-          icon: 'icon-[mdi--language-typescript]',
+          name: 'React',
+          icon: 'icon-[mdi--react]',
+        },
+        {
+          name: 'Vue.js',
+          icon: 'icon-[mdi--vuejs]', // 단색/라인, Material Design Icons
+        },
+        {
+          name: 'Tailwind CSS',
+          icon: 'icon-[mdi--tailwind]',
+        },
+        {
+          name: 'SCSS',
+          icon: 'icon-[mdi--language-css3]', // 라인/단색, 스타일 계열
+        },
+        {
+          name: 'Bootstrap',
+          icon: 'icon-[mdi--bootstrap]',
+        },
+        {
+          name: 'WebSquare',
+          icon: 'icon-[mdi--web]',
         },
       ],
     },
@@ -96,49 +116,36 @@ export const SKILLSSHOWCASE_CONFIG: SkillsShowcaseConfig = {
       direction: 'right',
       skills: [
         {
-          name: 'Astro',
-          icon: 'icon-[lineicons--astro]',
-        },
-        {
-          name: 'Node.js',
-          icon: 'icon-[mdi--nodejs]',
-        },
-        {
-          name: 'React',
-          icon: 'icon-[mdi--react]',
-        },
-        {
-          name: 'Next.js',
-          icon: 'icon-[devicon--nextjs]',
-        },
-        {
-          name: 'Tailwind CSS',
-          icon: 'icon-[mdi--tailwind]',
-        },
-        {
-          name: 'Iconify',
-          icon: 'icon-[line-md--iconify2-static]',
-        },
-      ],
-    },
-    {
-      direction: 'left',
-      skills: [
-        {
-          name: 'Ubuntu',
-          icon: 'icon-[mdi--ubuntu]',
-        },
-        {
           name: 'Git',
           icon: 'icon-[mdi--git]',
         },
         {
-          name: 'MongoDB',
-          icon: 'icon-[lineicons--mongodb]',
+          name: 'SVN',
+          icon: 'icon-[simple-icons--subversion]',
         },
         {
-          name: 'Vercel',
-          icon: 'icon-[lineicons--vercel]',
+          name: 'Figma',
+          icon: 'icon-[lineicons--figma]',
+        },
+        {
+          name: 'Zeplin',
+          icon: 'icon-[mdi--palette-outline]', // 라인, Material Design Icons
+        },
+        {
+          name: 'Sketch',
+          icon: 'icon-[lineicons--sketch]',
+        },
+        {
+          name: 'Adobe XD',
+          icon: 'icon-[simple-icons--adobexd]', // simple-icons 사용
+        },
+        {
+          name: 'Adobe Photoshop',
+          icon: 'icon-[simple-icons--adobephotoshop]', // simple-icons 사용
+        },
+        {
+          name: 'Cursor AI',
+          icon: 'icon-[mdi--robot]', // 공식 아이콘 없음, 대체 아이콘 사용
         },
       ],
     },
