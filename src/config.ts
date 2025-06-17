@@ -11,12 +11,12 @@ export const SITE: Site = {
 
 export const HEADER_LINKS: Link[] = [
   {
-    name: 'Posts',
-    url: '/posts',
-  },
-  {
     name: 'Projects',
     url: '/projects',
+  },
+  {
+    name: 'Posts',
+    url: '/posts',
   },
 ]
 
