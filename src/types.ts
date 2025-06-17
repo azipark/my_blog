@@ -173,6 +173,48 @@ export interface ProjectConfig {
   introduce: string
 }
 
+/**
+ * 경험 구성 인터페이스 / Experience configuration interface
+ * @property {string} title - 경험 페이지 제목 / Experience page title
+ * @property {string} description - 경험 페이지 설명 / Experience page description
+ * @property {string} intro - 경험 페이지 소개 / Experience page introduce
+ */
+export interface ExperienceConfig {
+  title: string
+  description: string
+  intro?: string
+}
+
+/**
+ * 경험 타입 / Experience type
+ * @description 학교 또는 직장 경험 / School or work experience
+ */
+export type ExperienceType = 'education' | 'work'
+
+/**
+ * 경험 인터페이스 / Experience interface
+ * @property {string} title - 직책 또는 학위 / Position or degree title
+ * @property {string} organization - 회사 또는 학교명 / Company or school name
+ * @property {string} location - 위치 / Location
+ * @property {string} startDate - 시작 날짜 / Start date
+ * @property {string} endDate - 종료 날짜 (현재 진행중인 경우 'Present') / End date (or 'Present' if current)
+ * @property {ExperienceType} type - 경험 타입 / Experience type
+ * @property {string} description - 경험 설명 / Experience description
+ * @property {string[]} skills - 관련 기술 또는 성과 / Related skills or achievements
+ * @property {string} [logo] - 회사 또는 학교 로고 / Company or school logo
+ */
+export interface Experience {
+  title: string
+  organization: string
+  location: string
+  startDate: string
+  endDate: string
+  type: ExperienceType
+  description: string
+  skills: string[]
+  logo?: string
+}
+
 // 项目图标类型 / Project icon type
 export type IconType = 'icon' | 'image'
 
@@ -201,4 +243,29 @@ export interface Project {
   star?: number
   fork?: number
   thumbnail?: string
+}
+
+export interface SEO {
+  title: string
+  description: string
+  noindex?: boolean
+  nofollow?: boolean
+}
+
+/**
+ * 수상 인터페이스 / Award interface
+ * @property {string} title - 상 이름 / Award title
+ * @property {string} organization - 주최기관 / Awarding organization
+ * @property {string} date - 수상 날짜 / Award date
+ * @property {string} description - 수상 설명 / Award description
+ * @property {string} category - 수상 카테고리 / Award category
+ * @property {string} [image] - 수상 이미지 / Award image
+ */
+export interface Award {
+  title: string
+  organization: string
+  date: string
+  description: string
+  category: string
+  image?: string
 }
