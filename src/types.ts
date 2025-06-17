@@ -187,6 +187,7 @@ export type IconType = 'icon' | 'image'
  * @property {string} imageClass - 项目图片样式类名 / Project image style class name
  * @property {number} star - 项目star数量 / Project star count
  * @property {number} fork - 项目fork数量 / Project fork count
+ * @property {string} thumbnail - 项目缩略图 / Project thumbnail
  */
 
 export interface Project {
@@ -199,4 +200,5 @@ export interface Project {
   imageClass?: string
   star?: number
   fork?: number
+  thumbnail?: string
 }
