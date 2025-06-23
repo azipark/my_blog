@@ -32,19 +32,9 @@ export const FOOTER_LINKS: Link[] = []
 export const SOCIAL_LINKS: SocialLink[] = [
   {
     name: 'github',
-    url: 'https://github.com/yourname',
+    url: 'https://github.com/azipark7721',
     icon: 'icon-[ri--github-fill]',
-  },
-  {
-    name: 'twitter',
-    url: 'https://x.com/yourname',
-    icon: 'icon-[ri--twitter-x-fill]',
-  },
-  {
-    name: 'bilibili',
-    url: 'https://space.bilibili.com/yourSpaceId',
-    icon: 'icon-[ri--bilibili-fill]',
-  },
+  }
 ]
 
 /**
@@ -223,6 +213,7 @@ export const ExperienceList: Experience[] = [
     startDate: '2023-01',
     endDate: 'Present',
     type: 'work',
+    employmentType: 'full-time',
     description: 'Developed and maintained modern web applications using React, TypeScript, and various frontend technologies. Collaborated with cross-functional teams to deliver high-quality user experiences.',
     skills: ['React', 'TypeScript', 'Tailwind CSS', 'Git', 'Figma'],
     logo: '/experience/company-logo.png'
@@ -234,14 +225,15 @@ export const ExperienceList: Experience[] = [
     startDate: '2022-03',
     endDate: '2022-12',
     type: 'work',
+    employmentType: 'freelance',
     description: 'Built responsive web interfaces and contributed to the development of company products. Gained experience in agile development methodologies.',
     skills: ['JavaScript', 'Vue.js', 'CSS', 'HTML'],
     logo: '/experience/startup-logo.png'
   },
   {
-    title: '전기전자컴퓨터공학과',
-    organization: '고려대학교',
-    location: '서울시 성북구',
+    title: 'Electrical, Electronics and Computer Engineering',
+    organization: 'Korea University',
+    location: 'Seongbuk-gu, Seoul',
     startDate: '2022-08',
     endDate: '2026-02',
     type: 'education',
@@ -250,9 +242,9 @@ export const ExperienceList: Experience[] = [
     logo: '/experience/university-logo.png'
   },
   {
-    title: '세무학 전공, 경영학 부전공',
-    organization: '강남대학교',
-    location: '경기도 용인시',
+    title: 'Tax Accounting Major, Business Administration Minor',
+    organization: 'Kangnam University',
+    location: 'Yongin-si, Gyeonggi-do',
     startDate: '2008-03',
     endDate: '2014-08',
     type: 'education',
