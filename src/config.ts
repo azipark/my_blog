@@ -246,7 +246,7 @@ export const ExperienceList: Experience[] = [
     endDate: '2026-02',
     type: 'education',
     description: 'Bachelor of Science in Computer Science. Focused on software engineering, algorithms, and web development. Graduated with honors.',
-    skills: ['Data Structures', 'Algorithms', 'Software Engineering', 'Database Design'],
+    skills: [],
     logo: '/experience/university-logo.png'
   },
   {
@@ -257,7 +257,7 @@ export const ExperienceList: Experience[] = [
     endDate: '2022-02',
     type: 'education',
     description: 'Bachelor of Science in Computer Science. Focused on software engineering, algorithms, and web development. Graduated with honors.',
-    skills: ['Data Structures', 'Algorithms', 'Software Engineering', 'Database Design'],
+    skills: [],
     logo: '/experience/university-logo.png'
   }
 ]
