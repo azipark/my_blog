@@ -166,9 +166,11 @@ function getEmploymentTypeColor(employmentType?: string): string {
                 </div>
               )}
               
-              <p class="text-xs text-muted-foreground leading-relaxed mb-4">
-                {experience.description}
-              </p>
+              {experience.description && (
+                <p class="text-xs text-muted-foreground leading-relaxed mb-4">
+                  {experience.description}
+                </p>
+              )}
               
               {experience.skills && experience.skills.length > 0 && (
                 <div class="flex flex-wrap gap-2">
