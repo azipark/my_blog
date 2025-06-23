@@ -256,23 +256,6 @@ export const AwardsList: Award[] = [
     organization: 'Tech Conference 2023',
     date: '2023-11',
     description: 'Recognized for outstanding contribution to frontend development and innovative UI/UX solutions.',
-    category: 'Development',
     image: '/awards/frontend-award.png'
   },
-  {
-    title: 'Excellence in Web Development',
-    organization: 'University of Technology',
-    date: '2022-02',
-    description: 'Awarded for exceptional performance in web development coursework and final project.',
-    category: 'Academic',
-    image: '/awards/academic-award.png'
-  },
-  {
-    title: 'Innovation Challenge Winner',
-    organization: 'Startup Inc.',
-    date: '2022-08',
-    description: 'First place in company-wide innovation challenge for developing an efficient web application.',
-    category: 'Innovation',
-    image: '/awards/innovation-award.png'
-  }
 ]
