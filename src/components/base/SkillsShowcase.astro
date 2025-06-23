@@ -58,7 +58,7 @@ const duplicateSkills = (skills: Skill[]) => [...skills, ...skills, ...skills]
   }
 </style>
 <script>
-  // 动态调整动画速度
+  // Dynamically adjust animation speed
   function adjustAnimationSpeed() {
     const tracks = document.querySelectorAll<HTMLElement>('.flex.w-max')
     const screenWidth = window.innerWidth
@@ -67,11 +67,11 @@ const duplicateSkills = (skills: Skill[]) => [...skills, ...skills, ...skills]
     const newDuration = `${baseSpeed * speedFactor}s`
 
     tracks.forEach((track) => {
-      // 直接更新动画持续时间，不暂停动画
+      // Directly update animation duration without pausing animation
       track.style.animationDuration = newDuration
     })
   }
 
-  // 监听事件
+  // Listen to events
   window.addEventListener('before-swap', adjustAnimationSpeed)
 </script>

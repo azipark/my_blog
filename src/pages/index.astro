@@ -23,7 +23,7 @@ if (ENABLED) {
     const githubInfo = await GET(Astro)
     const githubData = await githubInfo.json()
 
-    // 默认53周，不足53周则填充
+    // Default 53 weeks, fill in if less than 53 weeks
     const last53weeks = githubData?.data?.viewer?.contributionsCollection?.contributionCalendar?.weeks.slice(-53)
     const newWeeks = padMissingWeeks(last53weeks, 53)
 
@@ -89,7 +89,7 @@ const posts = postsSort(allPosts).slice(0, size)
               <p class="text-muted-foreground mb-4 flex-1">{project.description}</p>
               <div class="flex gap-2 mt-auto">
                 {project.website && (
-                  <a href={project.website} target="_blank" class="btn btn-primary btn-sm">사이트</a>
+                  <a href={project.website} target="_blank" class="btn btn-primary btn-sm">Website</a>
                 )}
                 {project.githubUrl && (
                   <a href={project.githubUrl} target="_blank" class="btn btn-outline btn-sm">GitHub</a>

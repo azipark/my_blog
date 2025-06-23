@@ -43,10 +43,10 @@
   const searchSwitch = document.getElementById('search-switch')
   const searchResults = document.getElementById('search-results')
 
-  // 声明 pagefind 类型
+  // Declare pagefind types
   declare const pagefind: any
 
-  // 打开搜索面板
+  // Open search panel
   const openSearch = () => {
     searchMask?.classList.remove('hidden')
     searchMask?.offsetHeight
@@ -55,7 +55,7 @@
     document.body.style.overflow = 'hidden'
   }
 
-  // 关闭搜索面板
+  // Close search panel
   const closeSearch = () => {
     searchMask?.classList.add('opacity-0')
     if (searchInput) searchInput.value = ''
@@ -73,19 +73,19 @@
       searchMask?.classList.add('hidden')
   }
 
-  // 点击开关
+  // Click switch button
   searchSwitch?.addEventListener('click', openSearch)
 
-  // 点击遮罩层关闭
+  // Click mask to close
   searchMask?.addEventListener('click', (e) => {
     if (e.target === searchMask) closeSearch()
   })
 
-  // 快捷键支持
+  // Keyboard shortcuts support
   document.addEventListener('keydown', (e) => {
-    // ESC关闭
+    // ESC to close
     if (e.key === 'Escape') closeSearch()
-    // Ctrl+K 切换
+    // Ctrl+K to toggle
     if (e.ctrlKey && e.key.toLowerCase() === 'k') {
       e.preventDefault()
       if (searchMask?.classList.contains('hidden')) {
@@ -105,7 +105,7 @@
       const target = e.target as HTMLInputElement
       const search = await pagefind.debouncedSearch(target.value)
 
-      // 添加结果长度判断
+      // Add result length check
       if (!search?.results && search?.results.length === 0 ) {
         const noResults = document.createElement('div')
         noResults.className = 'search-results-item text-center py-4 text-muted-foreground'
@@ -117,7 +117,7 @@
       if(search?.results){
         for (const result of search?.results) {
         const data = await result.data()
-        // 显示主结果
+        // Display main results
         const resultItem = document.createElement('a')
         resultItem.href = data.url
         resultItem.className = 'search-results-item'
@@ -128,14 +128,14 @@
         resultItem.addEventListener('click', closeSearchIn)
         searchResults?.appendChild(resultItem)
 
-        // 显示子结果（如果有）
+        // Display sub-results (if any)
         if (data.sub_results) {
           for (const subResult of data.sub_results) {
             if (subResult.excerpt === data.excerpt) continue;
 
             const cleanTitle = subResult.title.replace(/\s*[Hh][1-6]$/g, '');
 
-            if (!cleanTitle) continue; // 跳过空标题
+            if (!cleanTitle) continue; // Skip empty titles
 
             const subItem = document.createElement('a')
             subItem.href = subResult.url

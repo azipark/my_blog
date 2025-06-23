@@ -39,7 +39,7 @@ const { class: className } = Astro.props
       })
     }
 
-    // 监听暗色模式变化
+    // Listen for dark mode changes
     const observer = new MutationObserver(() => {
       darkModeHandler()
     })
@@ -51,7 +51,7 @@ const { class: className } = Astro.props
       })
       darkModeHandler()
 
-      // 监听 hover 事件
+      // Listen for hover events
       document.querySelectorAll('.markdown :not(image-figure-polaroid) img:not(.noDarken)').forEach((img) => {
         img.addEventListener('mouseenter', () => {
           img.style.removeProperty('filter')
