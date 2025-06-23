@@ -9,7 +9,7 @@
 /* 主题变量 */
 @theme {
   /* 字体 */
-  --font-serif: var(--font-lexend);
+  --font-serif: var(--font-pretendard);
   --font-mono: var(--font-dm-mono);
 
   /* 基础颜色 */
@@ -39,6 +39,15 @@
 
 /* 字体配置 =========================== */
 @layer base {
+  /* Pretendard 字体 */
+  @font-face {
+    font-family: 'Pretendard';
+    src: url('/fonts/PretendardVariable.woff2') format('woff2-variations');
+    font-weight: 45 920;
+    font-style: normal;
+    font-display: swap;
+  }
+
   /* 数字字体 */
   @font-face {
     font-family: 'Nubmers';
@@ -95,9 +104,9 @@
 @layer base {
   :root {
     /* 字体族 */
-    --font-lexend: 'Lexend', 'CJKEmDash', 'Nubmers', 'Onest', 'ShangguSansSCVF', sans-serif;
-    --font-sans: 'CJKEmDash', 'Nubmers', 'Onest', 'ShangguSansSCVF', system-ui, sans-serif;
-    --font-dm-mono: 'DM Mono', 'Input Mono', 'Fira Code', 'ShangguSansSCVF', monospace;
+    --font-pretendard: 'Pretendard', 'CJKEmDash', 'Nubmers', system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+    --font-sans: 'Pretendard', 'CJKEmDash', 'Nubmers', system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+    --font-dm-mono: 'DM Mono', 'Input Mono', 'Fira Code', 'Pretendard', monospace;
 
     /* 基础色调 */
     /* gray */
