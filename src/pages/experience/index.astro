@@ -18,11 +18,11 @@ function formatAwardDate(dateString: string): string {
   <main class="w-full max-w-4xl mx-auto px-4 py-8">
     <!-- 헤더 섹션 -->
     <header class="text-center mb-16">
-      <h1 class="text-4xl sm:text-5xl font-bold text-foreground mb-6 bg-gradient-to-r from-primary via-foreground to-primary bg-clip-text text-transparent">
+      <h1 class="text-3xl sm:text-4xl font-semibold uppercase text-foreground mb-6 bg-gradient-to-r from-primary via-foreground to-primary bg-clip-text text-transparent">
         {EXPERIENCE_CONFIG.title}
       </h1>
       
-      <p class="text-lg text-muted-foreground max-w-2xl mx-auto leading-relaxed">
+      <p class="text-base text-muted-foreground max-w-2xl mx-auto leading-relaxed">
         {EXPERIENCE_CONFIG.description}
       </p>
     </header>
@@ -42,21 +42,21 @@ function formatAwardDate(dateString: string): string {
     <section class="mb-16">
       <div class="grid grid-cols-1 sm:grid-cols-3 gap-6">
         <div class="text-center p-6 bg-blue-50 dark:bg-blue-950/30 rounded-lg border border-blue-200 dark:border-blue-800">
-          <div class="text-2xl font-bold text-blue-600 dark:text-blue-400 mb-2">
+          <div class="text-xl font-bold text-blue-600 dark:text-blue-400 mb-2">
             {workExperiences.length}
           </div>
           <div class="text-sm text-blue-700 dark:text-blue-300 font-medium">Work Experiences</div>
         </div>
         
         <div class="text-center p-6 bg-green-50 dark:bg-green-950/30 rounded-lg border border-green-200 dark:border-green-800">
-          <div class="text-2xl font-bold text-green-600 dark:text-green-400 mb-2">
+          <div class="text-xl font-bold text-green-600 dark:text-green-400 mb-2">
             {educationExperiences.length}
           </div>
           <div class="text-sm text-green-700 dark:text-green-300 font-medium">Education</div>
         </div>
         
         <div class="text-center p-6 bg-orange-50 dark:bg-orange-950/30 rounded-lg border border-orange-200 dark:border-orange-800">
-          <div class="text-2xl font-bold text-orange-600 dark:text-orange-400 mb-2">
+          <div class="text-xl font-bold text-orange-600 dark:text-orange-400 mb-2">
             {AwardsList.length}
           </div>
           <div class="text-sm text-orange-700 dark:text-orange-300 font-medium">Awards</div>
@@ -68,7 +68,7 @@ function formatAwardDate(dateString: string): string {
     {workExperiences.length > 0 && (
       <section class="mb-16">
         <div class="mb-8">
-          <h2 class="text-2xl font-semibold text-foreground mb-4 flex items-center gap-2">
+          <h2 class="text-xl font-semibold text-foreground mb-4 flex items-center gap-2">
             <span class="icon-[ph--briefcase] w-6 h-6 text-blue-500"></span>
             Work Experience
           </h2>
@@ -85,7 +85,7 @@ function formatAwardDate(dateString: string): string {
     {educationExperiences.length > 0 && (
       <section class="mb-16">
         <div class="mb-8">
-          <h2 class="text-2xl font-semibold text-foreground mb-4 flex items-center gap-2">
+          <h2 class="text-xl font-semibold text-foreground mb-4 flex items-center gap-2">
             <span class="icon-[ph--graduation-cap] w-6 h-6 text-green-500"></span>
             Education
           </h2>
@@ -101,7 +101,7 @@ function formatAwardDate(dateString: string): string {
     <!-- Awards 섹션 -->
     <section class="mt-16">
       <div class="mb-8">
-        <h2 class="text-2xl font-semibold text-foreground mb-4 flex items-center gap-2">
+        <h2 class="text-xl font-semibold text-foreground mb-4 flex items-center gap-2">
           <span class="icon-[ph--trophy] w-6 h-6 text-orange-500"></span>
           Awards & Recognition
         </h2>
@@ -127,7 +127,7 @@ function formatAwardDate(dateString: string): string {
               
               <div class="flex-1">
                 <div class="flex items-start justify-between mb-3">
-                  <h3 class="text-lg font-semibold text-foreground group-hover:text-primary transition-colors leading-tight">
+                  <h3 class="text-base font-semibold text-foreground group-hover:text-primary transition-colors leading-tight">
                     {award.title}
                   </h3>
                 </div>

@@ -42,8 +42,8 @@ const posts = postsSort(allPosts).slice(0, size)
   <div class="relative z-[1]">
     <div class="py-8 pb-10 px-6 sm:px-8">
       <h1 class="flex flex-col gap-2">
-        <span class="text-4xl sm:text-5xl tracking-tight"> Litos </span>
-        <span class="text-muted-foreground font-light text-xl sm:text-2xl block tracking-wide text-balance">
+        <span class="text-3xl sm:text-4xl tracking-tight"> Litos </span>
+        <span class="text-muted-foreground font-light text-lg sm:text-xl block tracking-wide text-balance">
           A Simple & Modern Blog Theme for Astro
         </span>
       </h1>
@@ -64,7 +64,7 @@ const posts = postsSort(allPosts).slice(0, size)
           <SectionDivider />
           <div class="py-8 pb-10 px-6 max-md:px-6">
             <div class="px-2 max-md:px-0">
-              <h2 class="text-2xl sm:text-3xl">Skills</h2>
+              <h2 class="text-xl sm:text-2xl">Skills</h2>
               <p class="text-muted-foreground mb-6 mt-1">Here are some of the skills I use:</p>
             </div>
             <SkillsShowcase skillsData={SKILLS_DATA} />
@@ -74,7 +74,7 @@ const posts = postsSort(allPosts).slice(0, size)
     }
     <SectionDivider />
     <section class="py-8 pb-10 px-6 sm:px-8">
-      <h2 class="text-3xl mb-6">Projects</h2>
+      <h2 class="text-2xl mb-6">Projects</h2>
       <div class="grid grid-cols-1 sm:grid-cols-2 gap-6">
         {ProjectList.map(project => (
           <div class="flex flex-col bg-muted rounded-lg shadow-md overflow-hidden h-full">
@@ -85,7 +85,7 @@ const posts = postsSort(allPosts).slice(0, size)
               loading="lazy"
             />
             <div class="p-4 flex-1 flex flex-col">
-              <h3 class="text-lg font-bold mb-2">{project.name}</h3>
+              <h3 class="text-base font-bold mb-2">{project.name}</h3>
               <p class="text-muted-foreground mb-4 flex-1">{project.description}</p>
               <div class="flex gap-2 mt-auto">
                 {project.website && (
@@ -102,7 +102,7 @@ const posts = postsSort(allPosts).slice(0, size)
     </section>
     <SectionDivider />
     <div class="py-8 pb-10 px-6 sm:px-8">
-      <h2 class="text-3xl">Posts</h2>
+      <h2 class="text-2xl">Posts</h2>
       <p class="text-muted-foreground mb-6 mt-1">
         Recent {posts.length} blog posts, hoping to be helpful.
       </p>

@@ -250,11 +250,11 @@ export const ExperienceList: Experience[] = [
     logo: '/experience/university-logo.png'
   },
   {
-    title: 'Computer Science',
-    organization: 'University of Technology',
-    location: 'Seoul, Korea',
-    startDate: '2018-03',
-    endDate: '2022-02',
+    title: '세무학 전공, 경영학 부전공',
+    organization: '강남대학교',
+    location: '경기도 용인시',
+    startDate: '2008-03',
+    endDate: '2014-08',
     type: 'education',
     description: 'Bachelor of Science in Computer Science. Focused on software engineering, algorithms, and web development. Graduated with honors.',
     skills: [],
@@ -264,10 +264,10 @@ export const ExperienceList: Experience[] = [
 
 export const AwardsList: Award[] = [
   {
-    title: 'Best Frontend Developer Award',
-    organization: 'Tech Conference 2023',
-    date: '2023-11',
-    description: 'Recognized for outstanding contribution to frontend development and innovative UI/UX solutions.',
+    title: '2019 공개 SW 컨트리뷰톤 장려상',
+    organization: '과학기술정보통신부 주최',
+    date: '2019-12',
+    description: '과학기술정보통신부 주최, 정보통신산업진흥원 주관의 공개 SW 컨트리뷰톤에서 "자바스크립트 튜토리얼 한글화" 프로젝트에 기여하여 장려상 수상',
     image: '/awards/frontend-award.png'
   },
 ]
