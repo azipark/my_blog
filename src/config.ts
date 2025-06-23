@@ -24,24 +24,7 @@ export const HEADER_LINKS: Link[] = [
   },
 ]
 
-export const FOOTER_LINKS: Link[] = [
-  {
-    name: 'Readme',
-    url: '/',
-  },
-  {
-    name: 'Posts',
-    url: '/posts',
-  },
-  {
-    name: 'Projects',
-    url: '/projects',
-  },
-  {
-    name: 'Tags',
-    url: '/tags',
-  },
-]
+export const FOOTER_LINKS: Link[] = []
 
 // get icon https://icon-sets.iconify.design/
 export const SOCIAL_LINKS: SocialLink[] = [
