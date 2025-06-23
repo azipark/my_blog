@@ -1,7 +1,7 @@
 ---
-import { GITHUB } from '~/config'
+import { GITHUB_CONFIG } from '~/config'
 
-const { ENABLED, USE_MOCK_DATA_FOR_DEVELOPMENT } = GITHUB
+const { ENABLED, USE_MOCK_DATA_FOR_DEVELOPMENT } = GITHUB_CONFIG
 
 // Only render if GitHub is enabled
 if (!ENABLED) {

@@ -102,9 +102,7 @@ function renderTocItem(item: any, depth = 0) {
         style="content-visibility: auto;"
       >
         {tocTree.length > 0 && (
-          <Fragment set:html={tocTree.map(item => (
-            <Fragment set:html={renderTocItem(item)} />
-          )).join('')}
+          <Fragment set:html={tocTree.map(item => renderTocItem(item)).join('')} />
         )}
       </ul>
     </div>
@@ -217,7 +215,9 @@ function renderTocItem(item: any, depth = 0) {
   }
 
   .toc-link.active {
-    @apply text-primary bg-accent border-primary;
+    color: hsl(var(--primary));
+    background-color: hsl(var(--accent));
+    border-color: hsl(var(--primary));
     font-weight: 500;
   }
 

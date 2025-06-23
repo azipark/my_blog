@@ -1,7 +1,5 @@
 ---
 import type { MarkdownHeading } from 'astro'
-import { POSTS_CONFIG } from '~/config'
-import { cn } from '~/lib/utils'
 
 interface Props {
   headings: MarkdownHeading[]
@@ -128,13 +126,17 @@ function renderTocItem(item: any, depth = 0) {
     if (!toggleButton || !modal || !closeButton) return
 
     function openModal() {
-      modal.classList.remove('hidden')
-      document.body.style.overflow = 'hidden'
+      if (modal) {
+        modal.classList.remove('hidden')
+        document.body.style.overflow = 'hidden'
+      }
     }
 
     function closeModal() {
-      modal.classList.add('hidden')
-      document.body.style.overflow = ''
+      if (modal) {
+        modal.classList.add('hidden')
+        document.body.style.overflow = ''
+      }
     }
 
     // Handle link clicks

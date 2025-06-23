@@ -32,7 +32,7 @@ const { text, position = 'top', class: className = '' } = Astro.props
         return tooltip
       }
 
-      function showTooltip(e: MouseEvent) {
+      function showTooltip(e: Event) {
         if (!tooltip) {
           tooltip = createTooltip()
         }

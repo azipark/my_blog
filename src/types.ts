@@ -1,18 +1,22 @@
 /**
  * Site basic information type
  * @description Contains site title and description
+ * @property {string} name - Site name
  * @property {string} title - Site title
  * @property {string} base - Site base path
  * @property {string} description - Site description
  * @property {string} author - Author name
+ * @property {string} url - Site URL
  * @property {string} website - Website address
  * @property {string} ogImage - OGP image address
  */
 export interface SiteInfo {
+  name: string
   title: string
   base: string
   description: string
   author: string
+  url: string
   website: string
   ogImage: string
 }
@@ -161,11 +165,13 @@ export interface ProjectConfig {
 
 /**
  * Experience configuration interface
+ * @property {boolean} enable - Whether to enable Experience section
  * @property {string} title - Experience page title
  * @property {string} description - Experience page description
  * @property {string} intro - Experience page introduce
  */
 export interface ExperienceConfig {
+  enable: boolean
   title: string
   description: string
   intro?: string
@@ -327,18 +333,6 @@ export interface ProjectsConfig {
   /** Projects title */
   title?: string
   /** Projects description */  
-  description?: string
-}
-
-/**
- * Experience configuration interface
- */
-export interface ExperienceConfig {
-  /** Whether to enable Experience section */
-  enable: boolean
-  /** Experience title */
-  title?: string
-  /** Experience description */
   description?: string
 }
 
