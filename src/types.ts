@@ -258,7 +258,6 @@ export interface SEO {
  * @property {string} organization - 주최기관 / Awarding organization
  * @property {string} date - 수상 날짜 / Award date
  * @property {string} description - 수상 설명 / Award description
- * @property {string} category - 수상 카테고리 / Award category
  * @property {string} [image] - 수상 이미지 / Award image
  */
 export interface Award {
@@ -266,6 +265,5 @@ export interface Award {
   organization: string
   date: string
   description: string
-  category: string
   image?: string
 }

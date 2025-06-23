@@ -6,19 +6,19 @@ import type { HeroImageAspectRatio, HeroImageLayout } from '~/types'
 const posts = defineCollection({
   type: 'content',
   schema: z.object({
-    // 文章标题（必需）
+    // Article title (required)
     title: z.string(),
-    // 文章描述（可选）
+    // Article description (optional)
     description: z.string(),
-    // 发布日期（必需）
+    // Publication date (required)
     pubDate: z.date(),
-    // 更新日期（可选）
+    // Update date (optional)
     updatedDate: z.date().optional(),
-    // 是否推荐文章，默认为 false
+    // Whether to recommend the article, defaults to false
     recommend: z.boolean().default(false),
-    // 文章作者，默认使用全局配置中的作者
+    // Article author, defaults to the author in global config
     author: z.string().default(POSTS_CONFIG.author),
-    // 文章封面图（可选）
+    // Article hero image (optional)
     heroImage: z
       .string()
       .transform((val) => {
@@ -26,7 +26,7 @@ const posts = defineCollection({
         return val.startsWith('http') ? val : `/hero-images/${val}`
       })
       .optional(),
-    // Open Graph 图片（可选）
+    // Open Graph image (optional)
     ogImage: z
       .string()
       .transform((val) => {
@@ -34,14 +34,14 @@ const posts = defineCollection({
         return val.startsWith('http') ? val : `/og-images/${val}`
       })
       .optional(),
-    // 封面图布局方式（可选）
+    // Hero image layout method (optional)
     heroImageLayout: z.custom<HeroImageLayout>().optional(),
-    // 封面图宽高比，默认使用全局配置
+    // Hero image aspect ratio, defaults to global config
     heroImageAspectRatio: z.custom<HeroImageAspectRatio>().default(POSTS_CONFIG.defaultHeroImageAspectRatio),
-    // 文章标签列表
+    // Article tags list
     tags: z.array(z.string()),
   }),
 })
 
-// 导出内容集合配置
+// Export content collection configuration
 export const collections = { posts }
