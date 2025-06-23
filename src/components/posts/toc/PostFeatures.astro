@@ -94,3 +94,41 @@ const pageNumber = Math.floor(postIndex / pageSize) + 1
 
   document.addEventListener('astro:page-load', setupFeatures)
 </script>
+
+<style>
+  .post-features {
+    position: fixed;
+    bottom: 2rem;
+    right: 2rem;
+    z-index: 40;
+  }
+
+  @media (max-width: 768px) {
+    .post-features {
+      bottom: 1rem;
+      right: 1rem;
+    }
+  }
+</style>
+
+<!-- Mobile feature buttons -->
+<script>
+  // Mobile TOC toggle functionality
+  const tocToggle = document.getElementById('mobile-toc-toggle')
+  const tocModal = document.getElementById('mobile-toc-modal')
+
+  if (tocToggle && tocModal) {
+    tocToggle.addEventListener('click', () => {
+      tocModal.classList.toggle('hidden')
+    })
+  }
+</script>
+
+<!-- Desktop feature buttons -->
+<style>
+  @media (min-width: 769px) {
+    .post-features {
+      display: none;
+    }
+  }
+</style>
