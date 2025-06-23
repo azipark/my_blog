@@ -13,9 +13,9 @@ export default defineEcConfig({
   minSyntaxHighlightingColorContrast: 0,
 
   styleOverrides: {
-    uiFontFamily: "'DM Mono','Input Mono','Fira Code','ShangguSansSCVF', 'monospace'",
+    uiFontFamily: "'DM Mono','Input Mono','Fira Code','Pretendard', 'monospace'",
     uiFontSize: '1em',
-    codeFontFamily: "'DM Mono','Input Mono','Fira Code','ShangguSansSCVF','monospace'",
+    codeFontFamily: "'DM Mono','Input Mono','Fira Code','Pretendard','monospace'",
     codeFontSize: '14px',
     codeLineHeight: '1.4',
     borderRadius: '0',
