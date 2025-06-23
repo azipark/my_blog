@@ -1,11 +1,13 @@
-import type { GithubConfig, Link, PostConfig, Project, ProjectConfig, Site, SkillsShowcaseConfig, SocialLink, TagsConfig, ExperienceConfig, Experience, Award } from '~/types'
+import type { GithubConfig, Link, PostConfig, Project, ProjectConfig, SiteInfo, SkillsShowcaseConfig, SocialLink, TagsConfig, ExperienceConfig, Experience, Award } from '~/types'
 
-export const SITE: Site = {
-  title: 'Litos',
-  description: 'Litos is a blog theme built with Astro.js and Dnzzk2.',
-  website: 'https://litos.vercel.app/',
+export const SITE: SiteInfo = {
+  name: 'My Blog',
+  title: 'My Blog',
+  description: '이것은 블로그 설명입니다.',
+  author: 'Your Name',
+  url: 'https://yourdomain.com',
   base: '/',
-  author: 'Dnzzk2',
+  website: 'https://yourdomain.com',
   ogImage: '/og-image.jpg',
 }
 
@@ -46,14 +48,13 @@ export const SOCIAL_LINKS: SocialLink[] = [
 ]
 
 /**
- * SkillsShowcase 配置接口 / SkillsShowcase configuration type
- * @property {boolean} SKILLS_ENABLED  - 是否启用SkillsShowcase功能 / Whether to enable SkillsShowcase features
- * @property {Object} SKILLS_DATA - 技能展示数据 / Skills showcase data
- * @property {string} SKILLS_DATA.direction - 技能展示方向 / Skills showcase direction
- * @property {Object} SKILLS_DATA.skills - 技能展示数据 / Skills showcase data
- * @property {string} SKILLS_DATA.skills.icon - 技能图标 / Skills icon
- * @property {string} SKILLS_DATA.skills.name - 技能名称 / Skills name
- * get icon https://icon-sets.iconify.design/
+ * SkillsShowcase configuration type
+ * @property {boolean} SKILLS_ENABLED  - Whether to enable SkillsShowcase features
+ * @property {Object} SKILLS_DATA - Skills showcase data
+ * @property {string} SKILLS_DATA.direction - Skills showcase direction
+ * @property {Object} SKILLS_DATA.skills - Skills showcase data
+ * @property {string} SKILLS_DATA.skills.icon - Skills icon
+ * @property {string} SKILLS_DATA.skills.name - Skills name
  */
 export const SKILLSSHOWCASE_CONFIG: SkillsShowcaseConfig = {
   SKILLS_ENABLED: true,
@@ -140,11 +141,10 @@ export const SKILLSSHOWCASE_CONFIG: SkillsShowcaseConfig = {
 }
 
 /**
- * GitHub配置 / GitHub configuration
- *
- * @property {boolean} ENABLED - 是否启用GitHub功能 / Whether to enable GitHub features
- * @property {number} CACHE_DURATION - 缓存持续时间(秒) / Cache duration in seconds
- * @property {boolean} USE_MOCK_DATA_FOR_DEVELOPMENT - 开发时使用模拟数据 / Use mock data in development
+ * GitHub configuration
+ * @property {boolean} ENABLED - Whether to enable GitHub features
+ * @property {number} CACHE_DURATION - Cache duration in seconds
+ * @property {boolean} USE_MOCK_DATA_FOR_DEVELOPMENT - Use mock data in development
  */
 
 export const GITHUB_CONFIG: GithubConfig = {
@@ -168,7 +168,7 @@ export const POSTS_CONFIG: PostConfig = {
   },
   tagsPageConfig: {
     size: 10,
-    type: 'time-line',
+    type: 'timeLine',
   },
   defaultHeroImage: '/og-image.jpg',
   defaultHeroImageAspectRatio: '16/9',
@@ -195,6 +195,7 @@ export const PROJECTS_CONFIG: ProjectConfig = {
 }
 
 export const EXPERIENCE_CONFIG: ExperienceConfig = {
+  enable: true,
   title: 'Experience',
   description: 'My professional journey and educational background',
   intro: 'Here is an overview of my career path, education, and the skills I have developed along the way.'
@@ -236,6 +237,17 @@ export const ExperienceList: Experience[] = [
     description: 'Built responsive web interfaces and contributed to the development of company products. Gained experience in agile development methodologies.',
     skills: ['JavaScript', 'Vue.js', 'CSS', 'HTML'],
     logo: '/experience/startup-logo.png'
+  },
+  {
+    title: '전기전자컴퓨터공학과',
+    organization: '고려대학교',
+    location: '서울시 성북구',
+    startDate: '2022-08',
+    endDate: '2026-02',
+    type: 'education',
+    description: 'Bachelor of Science in Computer Science. Focused on software engineering, algorithms, and web development. Graduated with honors.',
+    skills: ['Data Structures', 'Algorithms', 'Software Engineering', 'Database Design'],
+    logo: '/experience/university-logo.png'
   },
   {
     title: 'Computer Science',

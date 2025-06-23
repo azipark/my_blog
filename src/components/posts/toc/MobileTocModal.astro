@@ -8,176 +8,178 @@ interface Props {
 }
 
 const { headings } = Astro.props
-// 优化过滤逻辑，减少遍历次数
-const filteredHeadings = headings.reduce(
-  (acc, heading) => {
-    if (heading.depth <= 4 && heading.text.trim()) {
-      acc.push({
-        ...heading,
-        text: heading.text.replace(/\s*[Hh][1-6]$/g, ''),
-        order: acc.length + 1,
-      })
+
+function buildTocTree(headings: MarkdownHeading[]) {
+  const tree: any[] = []
+  const stack: any[] = []
+
+  for (const heading of headings) {
+    const item = {
+      ...heading,
+      children: []
     }
-    return acc
-  },
-  [] as (MarkdownHeading & { order: number })[]
-)
+
+    while (stack.length > 0 && stack[stack.length - 1].depth >= heading.depth) {
+      stack.pop()
+    }
+
+    if (stack.length === 0) {
+      tree.push(item)
+    } else {
+      stack[stack.length - 1].children.push(item)
+    }
+
+    stack.push(item)
+  }
+
+  return tree
+}
+
+const tocTree = buildTocTree(headings)
+
+function renderTocItem(item: any, depth = 0) {
+  const hasChildren = item.children && item.children.length > 0
+  const linkClass = `
+    block py-3 px-4 text-left w-full rounded-lg transition-all duration-200
+    text-foreground hover:bg-accent active:bg-accent/80
+    ${depth > 0 ? 'ml-4 text-sm opacity-90' : 'text-base'}
+    ${depth > 1 ? 'ml-8 text-sm opacity-75' : ''}
+  `.trim()
+
+  return `
+    <li class="mobile-toc-item">
+      <button 
+        class="mobile-toc-link ${linkClass}"
+        data-slug="${item.slug}"
+        type="button"
+      >
+        ${item.text}
+      </button>
+      ${hasChildren ? `
+        <ul class="mt-2 space-y-1">
+          ${item.children.map((child: any) => renderTocItem(child, depth + 1)).join('')}
+        </ul>
+      ` : ''}
+    </li>
+  `
+}
 ---
 
-<div
-  id="tocModal"
-  class="lg:hidden fixed inset-0 z-50 bg-background/80 backdrop-blur-sm opacity-0 pointer-events-none transition-all duration-200"
+<!-- Mobile TOC Toggle Button -->
+<button
+  id="mobile-toc-toggle"
+  class="fixed bottom-4 right-4 z-50 flex h-12 w-12 items-center justify-center rounded-full bg-primary text-primary-foreground shadow-lg transition-all hover:scale-105 active:scale-95 md:hidden"
+  aria-label="Toggle Table of Contents"
+  type="button"
 >
-  <div class="absolute right-4 bottom-24 w-72 max-h-[70vh] overflow-hidden bg-background border shadow-lg">
-    <div class="sticky top-0 z-20 flex items-center justify-between p-4 bg-background border-b">
-      <h2 class="text-sm font-medium">{POSTS_CONFIG.tocText}</h2>
-      <button id="tocClose" class="text-muted-foreground hover:text-foreground">
-        <span class="icon-[ph--x-bold] size-5"></span>
-      </button>
-    </div>
-    <div class="overflow-y-auto max-h-[calc(70vh-3.5rem)] no-scrollbar">
-      <ul class="p-4 text-sm space-y-2">
-        {
-          filteredHeadings.map((heading) => (
-            <li>
-              <a
-                href={`#${heading.slug}`}
-                data-heading-link
-                class={cn(
-                  'block py-1 px-2 transition-colors relative',
-                  'hover:bg-gradient-to-r hover:from-primary/10 dark:hover:from-primary/25 hover:to-transparent',
-                  'data-[active]:bg-gradient-to-r data-[active]:from-primary/10 dark:data-[active]:from-primary/25 data-[active]:to-transparent',
-                  heading.depth === 1 ? 'font-medium text-foreground' : 'text-muted-foreground',
-                  heading.depth > 2 ? 'ml-4' : ''
-                )}
-              >
-                {heading.text}
-              </a>
-            </li>
-          ))
-        }
-      </ul>
+  <svg class="h-6 w-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16" />
+  </svg>
+</button>
+
+<!-- Mobile TOC Modal -->
+<div
+  id="mobile-toc-modal"
+  class="fixed inset-0 z-40 hidden bg-background/80 backdrop-blur-sm md:hidden"
+  role="dialog"
+  aria-modal="true"
+  aria-labelledby="mobile-toc-title"
+>
+  <div class="flex min-h-full items-end justify-center p-4">
+    <div class="w-full max-w-md transform rounded-t-2xl bg-background p-6 shadow-xl transition-all">
+      <div class="mb-4 flex items-center justify-between">
+        <h3 id="mobile-toc-title" class="text-lg font-semibold text-foreground">
+          Table of Contents
+        </h3>
+        <button
+          id="mobile-toc-close"
+          class="flex h-8 w-8 items-center justify-center rounded-full text-muted-foreground hover:bg-accent hover:text-foreground"
+          aria-label="Close"
+          type="button"
+        >
+          <svg class="h-5 w-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
+          </svg>
+        </button>
+      </div>
+
+      <div class="max-h-96 overflow-y-auto">
+        {tocTree.length > 0 ? (
+          <ul class="space-y-2">
+            {tocTree.map(item => (
+              <Fragment set:html={renderTocItem(item)} />
+            ))}
+          </ul>
+        ) : (
+          <p class="text-center text-muted-foreground">No headings found</p>
+        )}
+      </div>
     </div>
   </div>
+</div>
 
-  <script>
-    function setupTocModal() {
-      const tocModal = document.getElementById('tocModal')
-      const tocLinks = tocModal?.querySelectorAll('[data-heading-link]')
-      let isScrolling = false
-      let scrollTimeout: ReturnType<typeof setTimeout> | undefined
+<script>
+  function initMobileToc() {
+    const toggleButton = document.getElementById('mobile-toc-toggle')
+    const modal = document.getElementById('mobile-toc-modal')
+    const closeButton = document.getElementById('mobile-toc-close')
+    const tocLinks = document.querySelectorAll('.mobile-toc-link')
 
-      // 使用事件委托处理所有点击事件
-      tocModal?.addEventListener('click', (e) => {
-        const target = e.target as HTMLElement
+    if (!toggleButton || !modal || !closeButton) return
 
-        // 处理关闭按钮点击
-        if (target.closest('#tocClose')) {
-          tocModal.classList.add('opacity-0', 'pointer-events-none')
-          return
-        }
-
-        // 处理模态框背景点击
-        if (target === tocModal) {
-          tocModal.classList.add('opacity-0', 'pointer-events-none')
-          return
-        }
-
-        // 处理链接点击
-        const link = target.closest('[data-heading-link]')
-        if (link) {
-          tocModal.classList.add('opacity-0', 'pointer-events-none')
-        }
-      })
-
-      // 优化滚动处理
-      const updateActiveHeading = (entries: IntersectionObserverEntry[]) => {
-        if (isScrolling) return
-
-        entries.forEach((entry) => {
-          if (entry.intersectionRatio > 0) {
-            const id = entry.target.id
-
-            // 使用 requestAnimationFrame 优化 DOM 更新
-            requestAnimationFrame(() => {
-              tocLinks?.forEach((link) => {
-                if (link.getAttribute('href') === `#${id}`) {
-                  link.setAttribute('data-active', '')
-                } else {
-                  link.removeAttribute('data-active')
-                }
-              })
-            })
-          }
-        })
-      }
-
-      const observer = new IntersectionObserver(updateActiveHeading, {
-        rootMargin: '-10px 0px -85% 0px',
-        threshold: [0, 1],
-      })
-
-      // 观察所有标题元素
-      const headingElements = document.querySelectorAll('h1[id], h2[id], h3[id], h4[id]')
-      headingElements.forEach((heading) => observer.observe(heading))
-
-      // 优化模态框显示事件
-      const tocTrigger = document.getElementById('tocTrigger')
-      const scrollToActiveLink = () => {
-        const activeLink = tocModal?.querySelector('[data-active]') as HTMLElement
-        if (!activeLink) return
-
-        const container = activeLink.closest('.overflow-y-auto') as HTMLElement
-        if (!container) return
-
-        isScrolling = true
-        const targetScroll = activeLink.offsetTop - container.offsetHeight / 2 + activeLink.offsetHeight / 2
-
-        // 使用 requestAnimationFrame 实现平滑滚动
-        const startScroll = container.scrollTop
-        const distance = targetScroll - startScroll
-        const duration = 300
-        const startTime = performance.now()
-
-        const animateScroll = (currentTime: number) => {
-          const elapsed = currentTime - startTime
-          const progress = Math.min(elapsed / duration, 1)
-
-          // 使用 easeInOutCubic 缓动函数
-          const easing = progress < 0.5 ? 4 * progress ** 3 : 1 - Math.pow(-2 * progress + 2, 3) / 2
-
-          container.scrollTop = startScroll + distance * easing
-
-          if (progress < 1) {
-            requestAnimationFrame(animateScroll)
-          } else {
-            isScrolling = false
-          }
-        }
-
-        requestAnimationFrame(animateScroll)
-      }
-
-      tocTrigger?.addEventListener('click', () => {
-        // 等待模态框显示动画完成后滚动
-        setTimeout(scrollToActiveLink, 200)
-      })
-
-      // 清理函数
-      return () => {
-        observer.disconnect()
-        tocTrigger?.removeEventListener('click', scrollToActiveLink)
-        if (scrollTimeout) {
-          clearTimeout(scrollTimeout)
-        }
-      }
+    function openModal() {
+      modal.classList.remove('hidden')
+      document.body.style.overflow = 'hidden'
     }
 
-    document.addEventListener('astro:page-load', () => {
-      const cleanup = setupTocModal()
-      document.addEventListener('astro:before-swap', () => {
-        cleanup?.()
+    function closeModal() {
+      modal.classList.add('hidden')
+      document.body.style.overflow = ''
+    }
+
+    // Handle link clicks
+    tocLinks.forEach(link => {
+      link.addEventListener('click', (e) => {
+        const target = e.target as HTMLElement
+        const slug = target.dataset.slug
+        if (slug) {
+          const heading = document.getElementById(slug)
+          if (heading) {
+            closeModal()
+            // Wait for modal hide animation to complete before scrolling
+            setTimeout(() => {
+              heading.scrollIntoView({ 
+                behavior: 'smooth', 
+                block: 'start' 
+              })
+            }, 200)
+          }
+        }
       })
     })
-  </script>
-</div>
+
+    // Event listeners
+    toggleButton.addEventListener('click', openModal)
+    closeButton.addEventListener('click', closeModal)
+
+    // Close on backdrop click
+    modal.addEventListener('click', (e) => {
+      if (e.target === modal) {
+        closeModal()
+      }
+    })
+
+    // Close on escape key
+    document.addEventListener('keydown', (e) => {
+      if (e.key === 'Escape' && !modal.classList.contains('hidden')) {
+        closeModal()
+      }
+    })
+  }
+
+  // Initialize on page load
+  document.addEventListener('DOMContentLoaded', initMobileToc)
+  
+  // Re-initialize on page transitions
+  document.addEventListener('astro:page-load', initMobileToc)
+</script>

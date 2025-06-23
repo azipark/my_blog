@@ -2,8 +2,8 @@
 @import 'rehype-callouts/theme/vitepress';
 @import url('https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/katex.min.css');
 
-/* 基础颜色 */
-.markdown {
+/* Base colors */
+:root {
   --text: #5c6170;
   --text-deep: #18181b;
   --heading: #18181b;
@@ -786,4 +786,14 @@ html:not(.dark) .img-dark {
   overflow-x: auto;
   overflow-y: hidden;
   padding: 0.25em;
+}
+
+/* Scrollbar styles */
+.scrollbar-hide {
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+}
+
+.scrollbar-hide::-webkit-scrollbar {
+  display: none;
 }

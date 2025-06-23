@@ -1,60 +1,115 @@
 ---
-import { cn } from '~/lib/utils'
-import Tooltip from './Tooltip.astro'
+import { GITHUB } from '~/config'
 
-type Props = {
-  weeks: Additional.Github.Week[]
+const { ENABLED, USE_MOCK_DATA_FOR_DEVELOPMENT } = GITHUB
+
+// Only render if GitHub is enabled
+if (!ENABLED) {
+  return null
 }
-
-const { weeks }: Props = Astro.props
 ---
 
-<div class="grid grid-flow-col gap-1 overflow-x-auto py-2 px-2 max-md:px-0">
-  {
-    weeks.map((week) => (
-      <div class="grid grid-rows-7 gap-1">
-        {week.contributionDays.map((contribution) => {
-          const { date, contributionCount } = contribution
-          const formattedDate = new Date(date).toLocaleDateString('en-US', {
-            weekday: 'long',
-            year: 'numeric',
-            month: 'long',
-            day: 'numeric',
-          })
-
-          const tooltipContent = `${formattedDate} — ${
-            contributionCount === 1 ? '1 contribution 💤' : contributionCount === 0 ? 'Rest day 🪴' : `${contributionCount} contributions`
-          }`
-
-          return (
-            <Tooltip content={tooltipContent}>
-              <div
-                class={cn(
-                  'size-2 relative hover:scale-125 transition-transform duration-200',
-                  contributionCount === 0
-                    ? 'bg-zinc-200 dark:bg-zinc-900'
-                    : contributionCount < 5
-                      ? 'bg-zinc-300 dark:bg-zinc-700'
-                      : contributionCount < 10
-                        ? 'bg-zinc-500'
-                        : 'bg-zinc-900 dark:bg-zinc-50'
-                )}
-              />
-            </Tooltip>
-          )
-        })}
+{ENABLED && (
+  <div class="github-contributions-container">
+    <div class="github-contributions-wrapper">
+      <div id="github-contributions" class="github-contributions-content">
+        <!-- GitHub contributions will be loaded here -->
       </div>
-    ))
-  }
-</div>
+    </div>
+  </div>
+)}
 
-<script is:inline>
-  // 确保在页面加载时滚动到最右侧
-  // Ensure to scroll to the far right when the page loads
-  window.addEventListener('load', () => {
-    const scrollContainer = document.querySelector('.overflow-x-auto')
-    if (scrollContainer) {
-      scrollContainer.scrollLeft = scrollContainer.scrollWidth
+<script define:vars={{ USE_MOCK_DATA_FOR_DEVELOPMENT }}>
+  async function loadGithubContributions() {
+    try {
+      const contributionsElement = document.getElementById('github-contributions')
+      if (!contributionsElement) return
+
+      // Show loading state
+      contributionsElement.innerHTML = `
+        <div class="flex items-center justify-center py-8">
+          <div class="animate-spin rounded-full h-8 w-8 border-b-2 border-primary"></div>
+          <span class="ml-3 text-muted-foreground">Loading GitHub contributions...</span>
+        </div>
+      `
+
+      const response = await fetch('/api/github')
+      const data = await response.json()
+
+      if (data.error) {
+        throw new Error(data.error)
+      }
+
+      contributionsElement.innerHTML = data.html
+
+      // Ensure scrolling to the rightmost position on page load
+      setTimeout(() => {
+        const scrollContainer = contributionsElement.querySelector('.js-calendar-graph-table')
+        if (scrollContainer) {
+          scrollContainer.scrollLeft = scrollContainer.scrollWidth
+        }
+      }, 100)
+
+    } catch (error) {
+      console.error('Failed to load GitHub contributions:', error)
+      const contributionsElement = document.getElementById('github-contributions')
+      if (contributionsElement) {
+        contributionsElement.innerHTML = `
+          <div class="text-center py-8 text-muted-foreground">
+            <p>Unable to load GitHub contributions</p>
+            <p class="text-sm mt-2">${error.message}</p>
+          </div>
+        `
+      }
     }
-  })
+  }
+
+  // Load on page ready
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', loadGithubContributions)
+  } else {
+    loadGithubContributions()
+  }
+
+  // Reload on page transitions
+  document.addEventListener('astro:page-load', loadGithubContributions)
 </script>
+
+<style>
+  .github-contributions-container {
+    @apply w-full overflow-hidden rounded-lg border bg-card;
+  }
+
+  .github-contributions-wrapper {
+    @apply p-4;
+  }
+
+  .github-contributions-content {
+    @apply w-full;
+  }
+
+  /* GitHub contributions specific styles */
+  :global(.js-calendar-graph-table) {
+    @apply overflow-x-auto;
+    scrollbar-width: thin;
+    scrollbar-color: hsl(var(--muted)) transparent;
+  }
+
+  :global(.js-calendar-graph-table::-webkit-scrollbar) {
+    height: 6px;
+  }
+
+  :global(.js-calendar-graph-table::-webkit-scrollbar-track) {
+    background: hsl(var(--muted) / 0.3);
+    border-radius: 3px;
+  }
+
+  :global(.js-calendar-graph-table::-webkit-scrollbar-thumb) {
+    background: hsl(var(--muted));
+    border-radius: 3px;
+  }
+
+  :global(.js-calendar-graph-table::-webkit-scrollbar-thumb:hover) {
+    background: hsl(var(--muted) / 0.8);
+  }
+</style>

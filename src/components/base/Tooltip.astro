@@ -1,253 +1,183 @@
 ---
 interface Props {
-  content: string
+  text: string
+  position?: 'top' | 'bottom' | 'left' | 'right'
   class?: string
 }
 
-const { content, class: className = '' } = Astro.props
+const { text, position = 'top', class: className = '' } = Astro.props
 ---
 
-<div class:list={['tooltip-trigger relative inline-block', className]} data-tooltip={content}>
+<div class={`tooltip-container ${className}`} data-tooltip={text} data-position={position}>
   <slot />
 </div>
 
 <script>
-  import { computePosition, autoPlacement, offset, arrow, shift, type Boundary } from '@floating-ui/dom'
+  function initTooltips() {
+    const tooltipContainers = document.querySelectorAll('.tooltip-container')
+    
+    tooltipContainers.forEach(container => {
+      const tooltipText = container.getAttribute('data-tooltip')
+      const position = container.getAttribute('data-position') || 'top'
+      
+      if (!tooltipText) return
 
-  declare global {
-    interface Window {
-      tooltipInitialized: boolean
-    }
-  }
+      let tooltip: HTMLElement | null = null
 
-  if (!window.tooltipInitialized) {
-    window.tooltipInitialized = true
-
-    let activeTooltip: HTMLElement | null = null
-    let hideTimeout: number | null = null
-    let activeTarget: HTMLElement | null = null
-
-    function initTooltips() {
-      const triggers = document.querySelectorAll('[data-tooltip]')
-
-      triggers.forEach((trigger) => {
-        trigger.addEventListener('mouseenter', handleMouseEnter as EventListener)
-        trigger.addEventListener('mouseleave', handleMouseLeave as EventListener)
-        trigger.addEventListener('touchstart', handleTouchStart as EventListener, {
-          passive: false,
-        })
-      })
-    }
-
-    function handleMouseEnter(e: MouseEvent) {
-      const trigger = e.currentTarget as HTMLElement
-      const content = trigger.getAttribute('data-tooltip')
-      if (content) {
-        activeTarget = trigger
-        if (hideTimeout) {
-          clearTimeout(hideTimeout)
-          hideTimeout = null
-        }
-        showTooltip(trigger, content)
-      }
-    }
-
-    function handleMouseLeave(e: MouseEvent) {
-      const trigger = e.currentTarget as HTMLElement
-      const toElement = e.relatedTarget as HTMLElement
-
-      // 检查是否移动到 tooltip 上
-      if (activeTooltip && (activeTooltip.contains(toElement) || toElement === activeTooltip)) {
-        return
+      function createTooltip() {
+        tooltip = document.createElement('div')
+        tooltip.className = `tooltip tooltip-${position}`
+        tooltip.textContent = tooltipText
+        document.body.appendChild(tooltip)
+        return tooltip
       }
 
-      // 检查是否在目标元素范围内
-      const rect = trigger.getBoundingClientRect()
-      const x = e.clientX
-      const y = e.clientY
-
-      const tolerance = 2
-      if (x >= rect.left - tolerance && x <= rect.right + tolerance && y >= rect.top - tolerance && y <= rect.bottom + tolerance) {
-        return
-      }
-
-      forceHideTooltip()
-    }
-
-    function forceHideTooltip() {
-      if (activeTooltip) {
-        activeTooltip.remove()
-        activeTooltip = null
-      }
-      activeTarget = null
-    }
-
-    function handleTouchStart(e: TouchEvent) {
-      e.preventDefault()
-
-      // 如果已经有显示的 tooltip，直接隐藏并返回
-      if (activeTooltip) {
-        forceHideTooltip()
-        return
-      }
-
-      const trigger = e.currentTarget as HTMLElement
-      const content = trigger.getAttribute('data-tooltip')
-      if (content) {
-        showTooltip(trigger, content)
-      }
-    }
-
-    async function showTooltip(trigger: HTMLElement, content: string) {
-      if (activeTooltip) {
-        activeTooltip.remove()
-        activeTooltip = null
-      }
-
-      const tooltip = document.createElement('div')
-      tooltip.className =
-        'tooltip-floating fixed z-50 px-2 py-1 text-xs bg-zinc-900 dark:bg-zinc-50 text-zinc-50 dark:text-zinc-900 rounded whitespace-nowrap pointer-events-none shadow-lg opacity-0 transition-opacity duration-200'
-      tooltip.textContent = content
-
-      const arrowElement = document.createElement('div')
-      arrowElement.className = 'absolute bg-zinc-900 dark:bg-zinc-50'
-      arrowElement.style.cssText = `
-        width: 8px;
-        height: 8px;
-        transform: rotate(45deg);
-        pointer-events: none;
-      `
-      tooltip.appendChild(arrowElement)
-
-      document.body.appendChild(tooltip)
-      activeTooltip = tooltip
-
-      // 创建更新位置的函数
-      const updatePosition = async () => {
-        const { x, y, placement, middlewareData } = await computePosition(trigger, tooltip, {
-          strategy: 'fixed',
-          placement: 'top',
-          middleware: [
-            offset(8),
-            shift({
-              padding: 5,
-              boundary: document.body,
-              rootBoundary: 'viewport',
-            }),
-            autoPlacement({
-              allowedPlacements: ['top', 'bottom'],
-              boundary: document.body as Boundary,
-            }),
-            arrow({
-              element: arrowElement,
-              padding: 0,
-            }),
-          ],
-        })
-
-        const triggerRect = trigger.getBoundingClientRect()
-        const triggerCenter = {
-          x: triggerRect.left + triggerRect.width / 2,
-          y: triggerRect.top + triggerRect.height / 2,
+      function showTooltip(e: MouseEvent) {
+        if (!tooltip) {
+          tooltip = createTooltip()
         }
 
-        // 使用 CSS transform 来定位，这样可以避免缩放影响
-        Object.assign(tooltip.style, {
-          position: 'fixed',
-          left: `${x}px`,
-          top: `${y}px`,
-          transform: 'translateY(6px)', // 初始位置用于动画
-          transformOrigin: 'top left',
-        })
+        const rect = container.getBoundingClientRect()
+        const tooltipRect = tooltip.getBoundingClientRect()
+        
+        let left = 0
+        let top = 0
 
-        if (middlewareData.arrow) {
-          const staticSide = {
-            top: 'bottom',
-            bottom: 'top',
-          }[placement.split('-')[0]]
-
-          const arrowLeft = triggerCenter.x - x - 4
-
-          Object.assign(arrowElement.style, {
-            position: 'absolute',
-            left: `${arrowLeft}px`,
-            [staticSide as string]: '-4px',
-            margin: '0',
-            zIndex: '1',
-          })
+        switch (position) {
+          case 'top':
+            left = rect.left + rect.width / 2 - tooltipRect.width / 2
+            top = rect.top - tooltipRect.height - 8
+            break
+          case 'bottom':
+            left = rect.left + rect.width / 2 - tooltipRect.width / 2
+            top = rect.bottom + 8
+            break
+          case 'left':
+            left = rect.left - tooltipRect.width - 8
+            top = rect.top + rect.height / 2 - tooltipRect.height / 2
+            break
+          case 'right':
+            left = rect.right + 8
+            top = rect.top + rect.height / 2 - tooltipRect.height / 2
+            break
         }
-      }
 
-      // 初始更新位置
-      await updatePosition()
+        // Keep tooltip within viewport bounds
+        const padding = 8
+        left = Math.max(padding, Math.min(left, window.innerWidth - tooltipRect.width - padding))
+        top = Math.max(padding, Math.min(top, window.innerHeight - tooltipRect.height - padding))
 
-      // 添加视口变化监听
-      const viewportHandler = () => {
-        if (activeTooltip === tooltip) {
-          requestAnimationFrame(updatePosition)
-        }
-      }
-
-      // 监听所有可能的滚动和缩放事件
-      window.addEventListener('scroll', viewportHandler, { passive: true })
-      document.addEventListener('scroll', viewportHandler, { passive: true })
-      window.visualViewport?.addEventListener('resize', viewportHandler)
-      window.visualViewport?.addEventListener('scroll', viewportHandler)
-
-      // 显示 tooltip
-      requestAnimationFrame(() => {
-        tooltip.style.transition = 'opacity 200ms ease-out, transform 200ms ease-out'
+        tooltip.style.left = `${left}px`
+        tooltip.style.top = `${top}px`
         tooltip.style.opacity = '1'
-        tooltip.style.transform = 'translateY(0)'
-      })
-
-      // 清理函数
-      const cleanup = () => {
-        window.removeEventListener('scroll', viewportHandler)
-        document.removeEventListener('scroll', viewportHandler)
-        window.visualViewport?.removeEventListener('resize', viewportHandler)
-        window.visualViewport?.removeEventListener('scroll', viewportHandler)
+        tooltip.style.visibility = 'visible'
       }
 
-      // 在 tooltip 被移除时清理事件监听
-      tooltip.addEventListener('remove', cleanup)
-    }
-
-    // 修改全局鼠标移动监听
-    document.addEventListener(
-      'mousemove',
-      (e) => {
-        if (!activeTooltip || !activeTarget) return
-
-        const rect = activeTarget.getBoundingClientRect()
-        const tolerance = 2
-
-        if (
-          e.clientX < rect.left - tolerance ||
-          e.clientX > rect.right + tolerance ||
-          e.clientY < rect.top - tolerance ||
-          e.clientY > rect.bottom + tolerance
-        ) {
-          forceHideTooltip()
+      function hideTooltip() {
+        if (tooltip) {
+          tooltip.style.opacity = '0'
+          tooltip.style.visibility = 'hidden'
         }
-      },
-      { passive: true }
-    )
+      }
 
-    // 初始化
-    document.addEventListener('DOMContentLoaded', initTooltips)
-    document.addEventListener('astro:page-load', initTooltips)
-
-    // 修改点击其他地方关闭tooltip的逻辑
-    document.addEventListener(
-      'touchstart',
-      (e) => {
-        if (activeTooltip && !(e.target as HTMLElement).closest('[data-tooltip]')) {
-          e.preventDefault()
-          forceHideTooltip()
+      function removeTooltip() {
+        if (tooltip) {
+          tooltip.remove()
+          tooltip = null
         }
-      },
-      { passive: false }
-    )
+      }
+
+      container.addEventListener('mouseenter', showTooltip)
+      container.addEventListener('mouseleave', hideTooltip)
+      container.addEventListener('focus', showTooltip)
+      container.addEventListener('blur', hideTooltip)
+
+      // Clean up on page transitions
+      document.addEventListener('astro:before-preparation', removeTooltip)
+    })
+
+    // Add viewport change listener
+    let resizeTimeout: number
+    window.addEventListener('resize', () => {
+      clearTimeout(resizeTimeout)
+      resizeTimeout = window.setTimeout(() => {
+        // Hide all tooltips on resize
+        document.querySelectorAll('.tooltip').forEach(tooltip => {
+          (tooltip as HTMLElement).style.opacity = '0';
+          (tooltip as HTMLElement).style.visibility = 'hidden'
+        })
+      }, 100)
+    })
   }
+
+  // Initialize on page load
+  document.addEventListener('DOMContentLoaded', initTooltips)
+  
+  // Re-initialize on page transitions
+  document.addEventListener('astro:page-load', initTooltips)
 </script>
+
+<style>
+  .tooltip-container {
+    position: relative;
+    display: inline-block;
+  }
+
+  :global(.tooltip) {
+    position: fixed;
+    z-index: 9999;
+    padding: 0.5rem 0.75rem;
+    background: hsl(var(--popover));
+    color: hsl(var(--popover-foreground));
+    border: 1px solid hsl(var(--border));
+    border-radius: 0.375rem;
+    font-size: 0.875rem;
+    line-height: 1.25rem;
+    white-space: nowrap;
+    opacity: 0;
+    visibility: hidden;
+    transition: opacity 0.2s ease-in-out, visibility 0.2s ease-in-out;
+    pointer-events: none;
+    box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+  }
+
+  :global(.tooltip::before) {
+    content: '';
+    position: absolute;
+    width: 0;
+    height: 0;
+    border-style: solid;
+  }
+
+  :global(.tooltip-top::before) {
+    bottom: -4px;
+    left: 50%;
+    transform: translateX(-50%);
+    border-width: 4px 4px 0 4px;
+    border-color: hsl(var(--border)) transparent transparent transparent;
+  }
+
+  :global(.tooltip-bottom::before) {
+    top: -4px;
+    left: 50%;
+    transform: translateX(-50%);
+    border-width: 0 4px 4px 4px;
+    border-color: transparent transparent hsl(var(--border)) transparent;
+  }
+
+  :global(.tooltip-left::before) {
+    right: -4px;
+    top: 50%;
+    transform: translateY(-50%);
+    border-width: 4px 0 4px 4px;
+    border-color: transparent transparent transparent hsl(var(--border));
+  }
+
+  :global(.tooltip-right::before) {
+    left: -4px;
+    top: 50%;
+    transform: translateY(-50%);
+    border-width: 4px 4px 4px 0;
+    border-color: transparent hsl(var(--border)) transparent transparent;
+  }
+</style>

@@ -31,6 +31,63 @@ const indentClass = new Map([
   [3, 'ml-4'],
   [4, 'ml-8'],
 ])
+
+function buildTocTree(headings: MarkdownHeading[]) {
+  const tree: any[] = []
+  const stack: any[] = []
+
+  for (const heading of headings) {
+    const item = {
+      ...heading,
+      children: []
+    }
+
+    while (stack.length > 0 && stack[stack.length - 1].depth >= heading.depth) {
+      stack.pop()
+    }
+
+    if (stack.length === 0) {
+      tree.push(item)
+    } else {
+      stack[stack.length - 1].children.push(item)
+    }
+
+    stack.push(item)
+  }
+
+  return tree
+}
+
+const tocTree = buildTocTree(headings)
+
+function renderTocItem(item: any, depth = 0) {
+  const hasChildren = item.children && item.children.length > 0
+  // Pre-calculate style classes to reduce runtime computation
+  const linkClass = `
+    block py-2 px-3 rounded-lg transition-all duration-200
+    text-sm text-muted-foreground hover:text-foreground hover:bg-accent
+    border-l-2 border-transparent hover:border-primary/30
+    ${depth > 0 ? 'ml-4 text-xs' : ''}
+    ${depth > 1 ? 'ml-8 opacity-75' : ''}
+  `.trim()
+
+  return `
+    <li class="toc-item" data-level="${item.depth}">
+      <a 
+        href="#${item.slug}" 
+        class="toc-link ${linkClass}"
+        data-slug="${item.slug}"
+      >
+        ${item.text}
+      </a>
+      ${hasChildren ? `
+        <ul class="mt-1 space-y-1">
+          ${item.children.map((child: any) => renderTocItem(child, depth + 1)).join('')}
+        </ul>
+      ` : ''}
+    </li>
+  `
+}
 ---
 
 <div class={cn('fixed top-30 right-[calc(50%-384px)] translate-x-full w-64', className)}>
@@ -44,129 +101,133 @@ const indentClass = new Map([
         data-desktop-toc-list
         style="content-visibility: auto;"
       >
-        {
-          filteredHeadings.map((heading) => {
-            // 预计算样式类，减少运行时计算
-            const depthClass = heading.depth === 1 ? 'font-medium text-foreground' : 'text-foreground/60 hover:text-foreground/90'
-
-            return (
-              <li>
-                <a
-                  href={`#${heading.slug}`}
-                  data-desktop-heading-link
-                  class={cn(
-                    'group flex text-sm min-h-[1.75rem] w-full overflow-hidden relative',
-                    'hover:bg-gradient-to-r hover:from-primary/10 dark:hover:from-primary/25 hover:to-transparent',
-                    'data-[active]:bg-gradient-to-r data-[active]:from-primary/10 dark:data-[active]:from-primary/25 data-[active]:to-transparent',
-                    depthClass,
-                    indentClass.get(heading.depth) || ''
-                  )}
-                >
-                  <span class="flex items-center px-2 text-xs text-primary/40 group-hover:text-primary/60 group-data-[active]:text-primary min-w-[2rem]">
-                    {heading.order.toString().padStart(2, '0')}
-                  </span>
-                  <span
-                    class="leading-[1.75rem] truncate pr-2 group-data-[active]:text-primary/90 group-data-[active]:font-medium"
-                    title={heading.text}
-                  >
-                    {heading.text}
-                  </span>
-                </a>
-              </li>
-            )
-          })
-        }
+        {tocTree.length > 0 && (
+          <Fragment set:html={tocTree.map(item => (
+            <Fragment set:html={renderTocItem(item)} />
+          )).join('')}
+        )}
       </ul>
     </div>
   </nav>
 </div>
 
 <script>
-  function updateActiveHeading() {
-    const headingElements = document.querySelectorAll('h1[id], h2[id], h3[id], h4[id]')
-    const headingLinks = document.querySelectorAll('[data-desktop-heading-link]')
-    const tocList = document.querySelector('[data-desktop-toc-list]') as HTMLElement
-    const tocContainer = tocList?.parentElement as HTMLElement
+  function initToc() {
+    const tocLinks = document.querySelectorAll('.toc-link')
+    const headings = document.querySelectorAll('h1, h2, h3, h4, h5, h6')
+    
+    if (!tocLinks.length || !headings.length) return
 
-    if (!headingLinks.length) return
+    let currentActiveLink: Element | null = null
 
-    let currentActiveHeading: string | null = null
-    let scrollTimeout: number | null = null
+    function setActiveLink(link: Element) {
+      if (currentActiveLink) {
+        currentActiveLink.classList.remove('active')
+      }
+      link.classList.add('active')
+      currentActiveLink = link
 
-    const observer = new IntersectionObserver(
-      (entries) => {
-        entries.forEach((entry) => {
-          if (entry.intersectionRatio > 0) {
-            const id = entry.target.id
-            if (currentActiveHeading === id) return
-
-            currentActiveHeading = id
-            headingLinks.forEach((link) => {
-              if (link.getAttribute('href') === `#${id}`) {
-                link.setAttribute('data-active', '')
-
-                // 使用 requestAnimationFrame 优化滚动性能
-                if (scrollTimeout) {
-                  window.cancelAnimationFrame(scrollTimeout)
-                }
-
-                scrollTimeout = window.requestAnimationFrame(() => {
-                  if (tocList && tocContainer) {
-                    const containerHeight = tocContainer.offsetHeight
-                    const activeLinkElement = link as HTMLElement
-                    const activeLinkTop = activeLinkElement.offsetTop
-                    const activeLinkHeight = activeLinkElement.offsetHeight
-                    const tocListHeight = tocList.offsetHeight
-
-                    // 计算目标滚动位置，使活动链接居中
-                    let targetTransform = Math.max(0, activeLinkTop - containerHeight / 2 + activeLinkHeight / 2)
-                    targetTransform = Math.min(targetTransform, tocListHeight - containerHeight)
-
-                    // 添加平滑滚动效果
-                    tocList.style.transition = 'transform 0.3s ease-out'
-                    tocList.style.transform = `translateY(-${targetTransform}px)`
-                  }
-                })
-              } else {
-                link.removeAttribute('data-active')
-              }
-            })
-          }
+      // Calculate target scroll position to center the active link
+      const tocContainer = document.querySelector('.toc-container')
+      if (tocContainer) {
+        const containerRect = tocContainer.getBoundingClientRect()
+        const linkRect = link.getBoundingClientRect()
+        const targetScroll = tocContainer.scrollTop + linkRect.top - containerRect.top - containerRect.height / 2 + linkRect.height / 2
+        
+        tocContainer.scrollTo({
+          top: targetScroll,
+          behavior: 'smooth'
         })
-      },
-      {
-        rootMargin: '-10px 0px -85% 0px',
-        threshold: [0, 1],
       }
-    )
+    }
 
-    headingElements.forEach((heading) => observer.observe(heading))
-
-    // 页面加载时检查当前可见的标题
-    setTimeout(() => {
-      const visibleHeading = Array.from(headingElements).find((heading) => {
+    function updateActiveLink() {
+      let activeHeading: Element | null = null
+      
+      for (const heading of headings) {
         const rect = heading.getBoundingClientRect()
-        return rect.top > 10 && rect.top < window.innerHeight * 0.33
-      })
-      if (visibleHeading) {
-        const link = document.querySelector(`[href="#${visibleHeading.id}"]`)
-        link?.setAttribute('data-active', '')
-      } else {
-        headingLinks[0]?.setAttribute('data-active', '')
+        if (rect.top <= 100) {
+          activeHeading = heading
+        } else {
+          break
+        }
       }
-    }, 100)
 
-    // 清理函数
-    return () => observer.disconnect()
+      if (activeHeading) {
+        const targetSlug = activeHeading.id
+        const targetLink = document.querySelector(`.toc-link[data-slug="${targetSlug}"]`)
+        if (targetLink && targetLink !== currentActiveLink) {
+          setActiveLink(targetLink)
+        }
+      }
+    }
+
+    // Check currently visible heading on page load
+    updateActiveLink()
+
+    // Update active link on scroll
+    let ticking = false
+    function onScroll() {
+      if (!ticking) {
+        requestAnimationFrame(() => {
+          updateActiveLink()
+          ticking = false
+        })
+        ticking = true
+      }
+    }
+
+    window.addEventListener('scroll', onScroll, { passive: true })
+
+    // Initialize after page content is loaded
+    if (document.readyState === 'loading') {
+      document.addEventListener('DOMContentLoaded', updateActiveLink)
+    }
+
+    // Clean up on page transitions
+    document.addEventListener('astro:before-preparation', () => {
+      window.removeEventListener('scroll', onScroll)
+    })
   }
 
-  // 确保在页面内容加载完成后初始化
-  document.addEventListener('astro:page-load', () => {
-    const cleanup = updateActiveHeading()
-
-    // 在页面切换时清理
-    document.addEventListener('astro:before-swap', () => {
-      cleanup?.()
-    })
-  })
+  // Initialize on page load
+  document.addEventListener('DOMContentLoaded', initToc)
+  
+  // Re-initialize on page transitions
+  document.addEventListener('astro:page-load', initToc)
 </script>
+
+<style>
+  .toc-container {
+    scrollbar-width: thin;
+    scrollbar-color: hsl(var(--muted)) transparent;
+  }
+
+  .toc-container::-webkit-scrollbar {
+    width: 4px;
+  }
+
+  .toc-container::-webkit-scrollbar-track {
+    background: transparent;
+  }
+
+  .toc-container::-webkit-scrollbar-thumb {
+    background: hsl(var(--muted));
+    border-radius: 2px;
+  }
+
+  .toc-link.active {
+    @apply text-primary bg-accent border-primary;
+    font-weight: 500;
+  }
+
+  .toc-link:hover {
+    transform: translateX(2px);
+  }
+
+  @media (max-width: 1200px) {
+    .toc-container {
+      display: none;
+    }
+  }
+</style>

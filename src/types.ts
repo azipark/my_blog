@@ -1,14 +1,14 @@
 /**
- * 站点基础信息类型 / Site basic information type
- * @description 包含站点标题和描述 / Contains site title and description
- * @property {string} title - 站点标题 / Site title
- * @property {string} base - 站点基础路径 / Site base path
- * @property {string} description - 站点描述 / Site description
- * @property {string} author - 作者名称 / Author name
- * @property {string} website - 网站地址 / Website address
- * @property {string} ogImage - OGP 图片地址 / OGP image address
+ * Site basic information type
+ * @description Contains site title and description
+ * @property {string} title - Site title
+ * @property {string} base - Site base path
+ * @property {string} description - Site description
+ * @property {string} author - Author name
+ * @property {string} website - Website address
+ * @property {string} ogImage - OGP image address
  */
-export type Site = {
+export interface SiteInfo {
   title: string
   base: string
   description: string
@@ -18,29 +18,29 @@ export type Site = {
 }
 
 /**
- * 文章封面图宽高比类型 / Hero image aspect ratio type
- * @description 可选值为 '16/9' 和 '3/4' / Possible values: '16/9' and '3/4'
+ * Hero image aspect ratio type
+ * @description Possible values: '16/9' and '3/4'
  */
 export type HeroImageAspectRatio = '16/9' | '3/4'
 
 /**
- * 文章封面图布局类型 / Hero image layout type
- * @description 可选值为 'left' 和 'right' / Possible values: 'left' and 'right'
+ * Hero image layout type
+ * @description Possible values: 'left' and 'right'
  */
 export type HeroImageLayout = 'left' | 'right'
 
 /**
- * 文章卡片类型 / PostCardType
- * @description 可选值为 'compact' 、'image' 和 'time-line' / Possible values: 'compact', 'image' and 'timeLine'
+ * Post card type
+ * @description Possible values: 'compact', 'image' and 'timeLine'
  */
-export type PostCardType = 'compact' | 'image' | 'time-line'
+export type PostCardType = 'compact' | 'image' | 'timeLine'
 
 /**
- * 文章卡片页面基础配置接口 / Post card page configuration interface
- * @description 用于配置文章卡片页面的显示方式 / Used to configure how post cards are displayed on pages
- * @property {PostCardType} type - 卡片展示类型 / Card display type
- * @property {number} size - 每页显示数量 / Number of items per page
- * @property {HeroImageLayout} heroImageLayout - 特色图片布局方式 / Hero image layout position
+ * Post card page configuration interface
+ * @description Used to configure how post cards are displayed on pages
+ * @property {PostCardType} type - Card display type
+ * @property {number} size - Number of items per page
+ * @property {HeroImageLayout} heroImageLayout - Hero image layout position
  */
 export interface PostCardPageConfig {
   type: PostCardType
@@ -49,25 +49,25 @@ export interface PostCardPageConfig {
 }
 
 /**
- * 文章配置接口 / Post configuration interface
- * @description 用于配置博客文章相关的全局设置 / Used to configure global settings for blog posts
- * @property {string} title - 文章标题 / Post title
- * @property {string} description - 文章描述 / Post description
- * @property {string} introduce - 文章介绍 / Post introduce
- * @property {string} author - 作者名称 / Author name
- * @property {PostCardPageConfig} homePageConfig - 首页文章展示配置 / Home page posts display configuration
- * @property {PostCardPageConfig} postPageConfig - 文章列表页展示配置 / Posts list page display configuration
- * @property {PostCardPageConfig} tagsPageConfig - 标签页文章展示配置 / Post display configuration for tags page
- * @property {string} defaultHeroImage - 默认文章封面图 / Default hero image for posts
- * @property {HeroImageAspectRatio} defaultHeroImageAspectRatio - 默认图片宽高比 / Default image aspect ratio
- * @property {boolean} imageDarkenInDark - 是否在暗黑模式下对图片进行暗化处理 / Whether to darken images in dark mode
- * @property {string} readMoreText - "阅读更多"按钮文本 / "Read more" button text
- * @property {string} prevPageText - 上一页按钮文本 / Previous page button text
- * @property {string} nextPageText - 下一页按钮文本 / Next page button text
- * @property {string} tocText - 目录文本 / Table of contents text
- * @property {string} backToPostsText - 返回文章列表按钮文本 / Back to posts list button text
- * @property {string} nextPostText - 下一篇文章按钮文本 / Next post button text
- * @property {string} prevPostText - 上一篇文章按钮文本 / Previous post button text
+ * Post configuration interface
+ * @description Used to configure global settings for blog posts
+ * @property {string} title - Post title
+ * @property {string} description - Post description
+ * @property {string} introduce - Post introduce
+ * @property {string} author - Author name
+ * @property {PostCardPageConfig} homePageConfig - Home page posts display configuration
+ * @property {PostCardPageConfig} postPageConfig - Posts list page display configuration
+ * @property {PostCardPageConfig} tagsPageConfig - Post display configuration for tags page
+ * @property {string} defaultHeroImage - Default hero image for posts
+ * @property {HeroImageAspectRatio} defaultHeroImageAspectRatio - Default image aspect ratio
+ * @property {boolean} imageDarkenInDark - Whether to darken images in dark mode
+ * @property {string} readMoreText - "Read more" button text
+ * @property {string} prevPageText - Previous page button text
+ * @property {string} nextPageText - Next page button text
+ * @property {string} tocText - Table of contents text
+ * @property {string} backToPostsText - Back to posts list button text
+ * @property {string} nextPostText - Next post button text
+ * @property {string} prevPostText - Previous post button text
  */
 export interface PostConfig {
   title: string
@@ -90,10 +90,10 @@ export interface PostConfig {
 }
 
 /**
- * 标签配置接口 / Tags configuration interface
- * @property {string} title - 标签页标题 / Tags page title
- * @property {string} description - 标签页描述 / Tags page description
- * @property {string} introduce - 标签页介绍 / Tags page introduce
+ * Tags configuration interface
+ * @property {string} title - Tags page title
+ * @property {string} description - Tags page description
+ * @property {string} introduce - Tags page introduce
  */
 export interface TagsConfig {
   title: string
@@ -112,13 +112,13 @@ export interface SkillData {
 }
 
 /**
- * SkillsShowcase 配置接口 / SkillsShowcase configuration type
- * @property {boolean} SKILLS_ENABLED  - 是否启用SkillsShowcase功能 / Whether to enable SkillsShowcase features
- * @property {Object} SKILLS_DATA - 技能展示数据 / Skills showcase data
- * @property {string} SKILLS_DATA.direction - 技能展示方向 / Skills showcase direction
- * @property {Object} SKILLS_DATA.skills - 技能展示数据 / Skills showcase data
- * @property {string} SKILLS_DATA.skills.icon - 技能图标 / Skills icon
- * @property {string} SKILLS_DATA.skills.name - 技能名称 / Skills name
+ * SkillsShowcase configuration type
+ * @property {boolean} SKILLS_ENABLED  - Whether to enable SkillsShowcase features
+ * @property {Object} SKILLS_DATA - Skills showcase data
+ * @property {string} SKILLS_DATA.direction - Skills showcase direction
+ * @property {Object} SKILLS_DATA.skills - Skills showcase data
+ * @property {string} SKILLS_DATA.skills.icon - Skills icon
+ * @property {string} SKILLS_DATA.skills.name - Skills name
  */
 export interface SkillsShowcaseConfig {
   SKILLS_ENABLED: boolean
@@ -126,10 +126,10 @@ export interface SkillsShowcaseConfig {
 }
 
 /**
- * GitHub配置类型 / GitHub configuration type
- * @property {boolean} ENABLED - 是否启用GitHub功能 / Whether to enable GitHub features
- * @property {number} CACHE_DURATION - 缓存持续时间(秒) / Cache duration in seconds
- * @property {boolean} USE_MOCK_DATA_FOR_DEVELOPMENT - 开发时使用模拟数据 / Use mock data in development
+ * GitHub configuration type
+ * @property {boolean} ENABLED - Whether to enable GitHub features
+ * @property {number} CACHE_DURATION - Cache duration in seconds
+ * @property {boolean} USE_MOCK_DATA_FOR_DEVELOPMENT - Use mock data in development
  */
 export type GithubConfig = {
   ENABLED: boolean
@@ -138,9 +138,9 @@ export type GithubConfig = {
 }
 
 /**
- * 链接类型 / Link type
- * @property {string} name - 链接显示名称 / Link display name
- * @property {string} url - 链接URL / Link URL
+ * Link type
+ * @property {string} name - Link display name
+ * @property {string} url - Link URL
  */
 export type Link = {
   name: string
@@ -148,24 +148,10 @@ export type Link = {
 }
 
 /**
- * 社交媒体链接类型 / Social media link type
- * @property {string} name - 平台名称 / Platform name
- * @property {string} url - 个人主页URL / Profile URL
- * @property {string} icon - 图标类名 / Icon class name
- * @property {number} [count] - 可选计数 / Optional count
- */
-export type SocialLink = {
-  name: string
-  url: string
-  icon: string
-  count?: number
-}
-
-/**
- * 项目配置接口 / Project configuration interface
- * @property {string} title - 项目标题 / Project title
- * @property {string} description - 项目描述 / Project description
- * @property {string} introduce - 项目介绍 / Project introduce
+ * Project configuration interface
+ * @property {string} title - Project title
+ * @property {string} description - Project description
+ * @property {string} introduce - Project introduce
  */
 export interface ProjectConfig {
   title: string
@@ -174,10 +160,10 @@ export interface ProjectConfig {
 }
 
 /**
- * 경험 구성 인터페이스 / Experience configuration interface
- * @property {string} title - 경험 페이지 제목 / Experience page title
- * @property {string} description - 경험 페이지 설명 / Experience page description
- * @property {string} intro - 경험 페이지 소개 / Experience page introduce
+ * Experience configuration interface
+ * @property {string} title - Experience page title
+ * @property {string} description - Experience page description
+ * @property {string} intro - Experience page introduce
  */
 export interface ExperienceConfig {
   title: string
@@ -186,22 +172,22 @@ export interface ExperienceConfig {
 }
 
 /**
- * 경험 타입 / Experience type
- * @description 학교 또는 직장 경험 / School or work experience
+ * Experience type
+ * @description School or work experience
  */
 export type ExperienceType = 'education' | 'work'
 
 /**
- * 경험 인터페이스 / Experience interface
- * @property {string} title - 직책 또는 학위 / Position or degree title
- * @property {string} organization - 회사 또는 학교명 / Company or school name
- * @property {string} location - 위치 / Location
- * @property {string} startDate - 시작 날짜 / Start date
- * @property {string} endDate - 종료 날짜 (현재 진행중인 경우 'Present') / End date (or 'Present' if current)
- * @property {ExperienceType} type - 경험 타입 / Experience type
- * @property {string} description - 경험 설명 / Experience description
- * @property {string[]} skills - 관련 기술 또는 성과 / Related skills or achievements
- * @property {string} [logo] - 회사 또는 학교 로고 / Company or school logo
+ * Experience interface
+ * @property {string} title - Position or degree title
+ * @property {string} organization - Company or school name
+ * @property {string} location - Location
+ * @property {string} startDate - Start date
+ * @property {string} endDate - End date (or 'Present' if current)
+ * @property {ExperienceType} type - Experience type
+ * @property {string} description - Experience description
+ * @property {string[]} skills - Related skills or achievements
+ * @property {string} [logo] - Company or school logo
  */
 export interface Experience {
   title: string
@@ -266,4 +252,253 @@ export interface Award {
   date: string
   description: string
   image?: string
+}
+
+/**
+ * Navigation menu item type
+ */
+export interface MenuItem {
+  /** Menu text */
+  text: string
+  /** Menu link */
+  href: string
+  /** Whether external link */
+  external?: boolean
+}
+
+/**
+ * Social media link type
+ */
+export interface SocialLink {
+  /** Platform name */
+  name: string
+  /** Platform URL */
+  url: string
+  /** Platform icon */
+  icon: string
+}
+
+/**
+ * Hero section configuration type
+ */
+export interface HeroConfig {
+  /** Whether to enable Hero section */
+  enable: boolean
+  /** Hero title */
+  title?: string
+  /** Hero subtitle */
+  subtitle?: string
+  /** Avatar image path */
+  avatar?: string
+  /** Social media links */
+  social?: SocialLink[]
+}
+
+/**
+ * About section configuration type
+ */
+export interface AboutConfig {
+  /** Whether to enable About section */
+  enable: boolean
+  /** About title */
+  title?: string
+  /** About description */
+  description?: string
+}
+
+/**
+ * Blog configuration type
+ */
+export interface BlogConfig {
+  /** Whether to enable Blog section */
+  enable: boolean
+  /** Blog title */
+  title?: string
+  /** Blog description */
+  description?: string
+}
+
+/**
+ * Project configuration interface
+ */
+export interface ProjectsConfig {
+  /** Whether to enable Projects section */
+  enable: boolean
+  /** Projects title */
+  title?: string
+  /** Projects description */  
+  description?: string
+}
+
+/**
+ * Experience configuration interface
+ */
+export interface ExperienceConfig {
+  /** Whether to enable Experience section */
+  enable: boolean
+  /** Experience title */
+  title?: string
+  /** Experience description */
+  description?: string
+}
+
+/**
+ * Skills configuration interface
+ */
+export interface SkillsConfig {
+  /** Whether to enable Skills section */
+  enable: boolean
+  /** Skills title */
+  title?: string
+  /** Skills description */
+  description?: string
+}
+
+/**
+ * Contact configuration interface
+ */
+export interface ContactConfig {
+  /** Whether to enable Contact section */
+  enable: boolean
+  /** Contact title */
+  title?: string
+  /** Contact description */
+  description?: string
+  /** Contact email */
+  email?: string
+}
+
+/**
+ * SEO configuration type
+ */
+export interface SEOConfig {
+  /** Default meta title */
+  title?: string
+  /** Default meta description */
+  description?: string
+  /** Default meta keywords */
+  keywords?: string[]
+  /** Default Open Graph image */
+  image?: string
+  /** Twitter card type */
+  twitterCard?: 'summary' | 'summary_large_image' | 'app' | 'player'
+}
+
+/**
+ * RSS configuration type
+ */
+export interface RSSConfig {
+  /** Whether to enable RSS */
+  enable: boolean
+  /** RSS title */
+  title?: string
+  /** RSS description */
+  description?: string
+  /** Number of articles to include */
+  limit?: number
+}
+
+/**
+ * Comment system configuration type
+ */
+export interface CommentsConfig {
+  /** Whether to enable comments */
+  enable: boolean
+  /** Comment system provider */
+  provider?: 'giscus' | 'disqus'
+  /** Giscus configuration */
+  giscus?: {
+    repo: string
+    repoId: string
+    category: string
+    categoryId: string
+    mapping: string
+    strict: string
+    reactionsEnabled: string
+    emitMetadata: string
+    inputPosition: string
+    theme: string
+    lang: string
+  }
+}
+
+/**
+ * Analytics configuration type
+ */
+export interface AnalyticsConfig {
+  /** Whether to enable analytics */
+  enable: boolean
+  /** Analytics provider */
+  provider?: 'google' | 'umami'
+  /** Google Analytics configuration */
+  google?: {
+    id: string
+  }
+  /** Umami Analytics configuration */
+  umami?: {
+    id: string
+    src: string
+  }
+}
+
+/**
+ * Search configuration type
+ */
+export interface SearchConfig {
+  /** Whether to enable search */
+  enable: boolean
+  /** Search provider */
+  provider?: 'algolia' | 'local'
+  /** Algolia configuration */
+  algolia?: {
+    appId: string
+    apiKey: string
+    indexName: string
+  }
+}
+
+/**
+ * Theme configuration type
+ */
+export interface ThemeConfig {
+  /** Default theme mode */
+  defaultMode?: 'light' | 'dark' | 'system'
+  /** Whether to enable theme toggle */
+  enableToggle?: boolean
+}
+
+/**
+ * Site configuration type
+ */
+export interface SiteConfig {
+  /** Site basic information */
+  site: SiteInfo
+  /** Navigation menu */
+  menu: MenuItem[]
+  /** Hero section configuration */
+  hero: HeroConfig
+  /** About section configuration */
+  about: AboutConfig
+  /** Blog configuration */
+  blog: BlogConfig
+  /** Projects configuration */
+  projects: ProjectsConfig
+  /** Experience configuration */
+  experience: ExperienceConfig
+  /** Skills configuration */
+  skills: SkillsConfig
+  /** Contact configuration */
+  contact: ContactConfig
+  /** SEO configuration */
+  seo: SEOConfig
+  /** RSS configuration */
+  rss: RSSConfig
+  /** Comments configuration */
+  comments: CommentsConfig
+  /** Analytics configuration */
+  analytics: AnalyticsConfig
+  /** Search configuration */
+  search: SearchConfig
+  /** Theme configuration */
+  theme: ThemeConfig
 }
