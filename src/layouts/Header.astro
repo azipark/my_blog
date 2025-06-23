@@ -2,7 +2,6 @@
 import { HEADER_LINKS } from '~/config'
 import ThemeToggle from '~/components/theme/ThemeToggle'
 import HeaderGradient from '~/components/theme/HeaderGradient.astro'
-import SectionDivider from '~/components/base/SectionDivider.astro'
 import HeaderLink from '~/components/base/HeaderLink.astro'
 
 const { pathname } = Astro.url
@@ -45,7 +44,6 @@ const { pathname } = Astro.url
     <div class="to-(--color-border)/50 absolute bottom-0 right-0 top-0 w-px bg-gradient-to-b from-transparent to-75%"></div>
   </div>
 </div>
-<SectionDivider position="top" />
 
 <script>
   let lastScrollY = 0
