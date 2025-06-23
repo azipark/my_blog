@@ -178,22 +178,27 @@ export interface ExperienceConfig {
 }
 
 /**
- * Experience type
- * @description School or work experience
+ * 고용 형태 타입 / Employment type
+ */
+export type EmploymentType = 'full-time' | 'part-time' | 'contract' | 'freelance' | 'internship'
+
+/**
+ * 경험 타입 / Experience type
  */
 export type ExperienceType = 'education' | 'work'
 
 /**
- * Experience interface
- * @property {string} title - Position or degree title
- * @property {string} organization - Company or school name
- * @property {string} location - Location
- * @property {string} startDate - Start date
- * @property {string} endDate - End date (or 'Present' if current)
- * @property {ExperienceType} type - Experience type
- * @property {string} description - Experience description
- * @property {string[]} skills - Related skills or achievements
- * @property {string} [logo] - Company or school logo
+ * 경험 인터페이스 / Experience interface
+ * @property {string} title - 직책 또는 학위 / Position or degree title
+ * @property {string} organization - 회사 또는 학교명 / Company or school name
+ * @property {string} location - 위치 / Location
+ * @property {string} startDate - 시작 날짜 / Start date
+ * @property {string} endDate - 종료 날짜 / End date
+ * @property {ExperienceType} type - 경험 타입 / Experience type
+ * @property {EmploymentType} [employmentType] - 고용 형태 (work 타입일 때만) / Employment type (only for work type)
+ * @property {string} description - 설명 / Description
+ * @property {string[]} skills - 사용 기술 / Skills used
+ * @property {string} [logo] - 로고 이미지 / Logo image
  */
 export interface Experience {
   title: string
@@ -202,6 +207,7 @@ export interface Experience {
   startDate: string
   endDate: string
   type: ExperienceType
+  employmentType?: EmploymentType
   description: string
   skills: string[]
   logo?: string

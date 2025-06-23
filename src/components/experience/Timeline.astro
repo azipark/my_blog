@@ -39,6 +39,40 @@ function calculateDuration(startDate: string, endDate: string): string {
     return result
   }
 }
+
+function getEmploymentTypeText(employmentType?: string): string {
+  switch (employmentType) {
+    case 'full-time':
+      return '정규직'
+    case 'part-time':
+      return '파트타임'
+    case 'contract':
+      return '계약직'
+    case 'freelance':
+      return '프리랜서'
+    case 'internship':
+      return '인턴'
+    default:
+      return ''
+  }
+}
+
+function getEmploymentTypeColor(employmentType?: string): string {
+  switch (employmentType) {
+    case 'full-time':
+      return 'bg-blue-100 text-blue-800 dark:bg-blue-900 dark:text-blue-200'
+    case 'part-time':
+      return 'bg-green-100 text-green-800 dark:bg-green-900 dark:text-green-200'
+    case 'contract':
+      return 'bg-yellow-100 text-yellow-800 dark:bg-yellow-900 dark:text-yellow-200'
+    case 'freelance':
+      return 'bg-purple-100 text-purple-800 dark:bg-purple-900 dark:text-purple-200'
+    case 'internship':
+      return 'bg-orange-100 text-orange-800 dark:bg-orange-900 dark:text-orange-200'
+    default:
+      return 'bg-gray-100 text-gray-800 dark:bg-gray-900 dark:text-gray-200'
+  }
+}
 ---
 
 <div class="relative">
@@ -75,22 +109,47 @@ function calculateDuration(startDate: string, endDate: string): string {
                     loading="lazy"
                   />
                 )}
-                <span class={`inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium ${
-                  experience.type === 'work' 
-                    ? 'bg-blue-100 text-blue-800 dark:bg-blue-900 dark:text-blue-200' 
-                    : 'bg-green-100 text-green-800 dark:bg-green-900 dark:text-green-200'
-                }`}>
-                  <span class={`w-2 h-2 rounded-full mr-1.5 ${
-                    experience.type === 'work' ? 'bg-blue-400' : 'bg-green-400'
-                  }`}></span>
-                  {experience.type === 'work' ? 'Work' : 'Education'}
-                </span>
+                <div class="flex items-center gap-2">
+                  <span class={`inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium ${
+                    experience.type === 'work' 
+                      ? 'bg-blue-100 text-blue-800 dark:bg-blue-900 dark:text-blue-200' 
+                      : 'bg-green-100 text-green-800 dark:bg-green-900 dark:text-green-200'
+                  }`}>
+                    <span class={`w-2 h-2 rounded-full mr-1.5 ${
+                      experience.type === 'work' ? 'bg-blue-400' : 'bg-green-400'
+                    }`}></span>
+                    {experience.type === 'work' ? 'Work' : 'Education'}
+                  </span>
+                  {experience.type === 'work' && experience.employmentType && (
+                    <span class={`inline-flex items-center px-2 py-0.5 rounded-full text-xs font-medium ${getEmploymentTypeColor(experience.employmentType)}`}>
+                      {getEmploymentTypeText(experience.employmentType)}
+                    </span>
+                  )}
+                </div>
               </div>
               
               <div class="flex items-start justify-between mb-3">
-                <h3 class="text-base font-semibold text-foreground group-hover:text-primary transition-colors leading-tight">
-                  {experience.title}
-                </h3>
+                {experience.type === 'work' ? (
+                  // Work: Show organization as main title, position as subtitle
+                  <div>
+                    <h3 class="text-base font-semibold text-foreground group-hover:text-primary transition-colors leading-tight">
+                      {experience.organization}
+                    </h3>
+                    <p class="text-sm font-medium text-muted-foreground mt-1">
+                      {experience.title}
+                    </p>
+                  </div>
+                ) : (
+                  // Education: Show title (degree/major) as main title, organization as subtitle
+                  <div>
+                    <h3 class="text-base font-semibold text-foreground group-hover:text-primary transition-colors leading-tight">
+                      {experience.title}
+                    </h3>
+                    <p class="text-sm font-medium text-muted-foreground mt-1">
+                      {experience.organization}
+                    </p>
+                  </div>
+                )}
                 
                 <div class="flex items-center gap-2 text-xs text-muted-foreground font-medium bg-muted/30 px-2 py-1 rounded-full border border-border/30">
                   <span class="icon-[ph--calendar] w-3 h-3"></span>
@@ -98,17 +157,14 @@ function calculateDuration(startDate: string, endDate: string): string {
                 </div>
               </div>
               
-              <div class="mb-3">
-                <p class="text-sm font-medium text-muted-foreground mb-1">
-                  {experience.organization}
-                </p>
-                {experience.location && (
+              {experience.location && (
+                <div class="mb-3">
                   <p class="text-xs text-muted-foreground/70 flex items-center gap-1">
                     <span class="icon-[ph--map-pin] w-3 h-3"></span>
                     {experience.location}
                   </p>
-                )}
-              </div>
+                </div>
+              )}
               
               <p class="text-xs text-muted-foreground leading-relaxed mb-4">
                 {experience.description}
