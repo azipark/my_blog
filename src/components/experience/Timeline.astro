@@ -24,22 +24,22 @@ function calculateDuration(startDate: string, endDate: string): string {
   const start = new Date(startDate)
   const end = endDate === 'Present' ? new Date() : new Date(endDate)
   
-  // Calculate years and months accurately
+  // 년, 월 차이 계산
   let years = end.getFullYear() - start.getFullYear()
   let months = end.getMonth() - start.getMonth()
   
-  // Adjust if the end day is before the start day in the month
+  // 일자를 고려한 조정
   if (end.getDate() < start.getDate()) {
     months--
   }
   
-  // Adjust negative months
+  // 음수 월 처리
   if (months < 0) {
     years--
     months += 12
   }
   
-  // Calculate total months for display logic
+  // 총 개월 수 계산
   const totalMonths = years * 12 + months
   
   if (totalMonths === 0) {
