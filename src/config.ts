@@ -5,7 +5,6 @@ export const SITE: SiteInfo = {
   title: 'My Blog',
   description: '이것은 블로그 설명입니다.',
   author: 'Your Name',
-  url: 'https://yourdomain.com',
   base: '/',
   website: 'https://yourdomain.com',
   ogImage: '/og-image.jpg',

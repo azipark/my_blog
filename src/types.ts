@@ -6,7 +6,6 @@
  * @property {string} base - Site base path
  * @property {string} description - Site description
  * @property {string} author - Author name
- * @property {string} url - Site URL
  * @property {string} website - Website address
  * @property {string} ogImage - OGP image address
  */
@@ -16,7 +15,6 @@ export interface SiteInfo {
   base: string
   description: string
   author: string
-  url: string
   website: string
   ogImage: string
 }
