@@ -6,6 +6,7 @@ import mdx from '@astrojs/mdx'
 import sitemap from '@astrojs/sitemap'
 import robotsTxt from 'astro-robots-txt'
 import expressiveCode from 'astro-expressive-code'
+import vercel from '@astrojs/vercel'
 import { remarkPlugins, rehypePlugins } from './plugins'
 import { SITE } from './src/config'
 
@@ -13,6 +14,10 @@ export default defineConfig({
   site: SITE.website,
   base: SITE.base,
   prefetch: true,
+  output: 'static',
+  adapter: vercel({
+    webAnalytics: { enabled: true }
+  }),
   vite: {
     plugins: [tailwindcss()],
     envDir: '.',
