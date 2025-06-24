@@ -24,14 +24,29 @@ function calculateDuration(startDate: string, endDate: string): string {
   const start = new Date(startDate)
   const end = endDate === 'Present' ? new Date() : new Date(endDate)
   
-  const diffTime = Math.abs(end.getTime() - start.getTime())
-  const diffMonths = Math.ceil(diffTime / (1000 * 60 * 60 * 24 * 30))
+  // Calculate years and months accurately
+  let years = end.getFullYear() - start.getFullYear()
+  let months = end.getMonth() - start.getMonth()
   
-  if (diffMonths < 12) {
-    return `${diffMonths} month${diffMonths > 1 ? 's' : ''}`
+  // Adjust if the end day is before the start day in the month
+  if (end.getDate() < start.getDate()) {
+    months--
+  }
+  
+  // Adjust negative months
+  if (months < 0) {
+    years--
+    months += 12
+  }
+  
+  // Calculate total months for display logic
+  const totalMonths = years * 12 + months
+  
+  if (totalMonths === 0) {
+    return 'Less than 1 month'
+  } else if (totalMonths < 12) {
+    return `${totalMonths} month${totalMonths > 1 ? 's' : ''}`
   } else {
-    const years = Math.floor(diffMonths / 12)
-    const months = diffMonths % 12
     let result = `${years} year${years > 1 ? 's' : ''}`
     if (months > 0) {
       result += ` ${months} month${months > 1 ? 's' : ''}`
