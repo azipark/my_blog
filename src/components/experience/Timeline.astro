@@ -199,9 +199,11 @@ function getEmploymentTypeColor(employmentType?: string): string {
             </div>
 
             <div class="text-right flex-shrink-0">
-              <div class="text-xs text-muted-foreground/70 mt-1">
-                {calculateDuration(experience.startDate, experience.endDate)}
-              </div>
+              {experience.type === 'work' && (
+                <div class="text-xs text-muted-foreground/70 mt-1">
+                  {calculateDuration(experience.startDate, experience.endDate)}
+                </div>
+              )}
             </div>
           </div>
         </div>
