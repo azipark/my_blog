@@ -116,14 +116,6 @@ function getEmploymentTypeColor(employmentType?: string): string {
           <div class="flex flex-col sm:flex-row sm:items-start justify-between gap-4 mb-4">
             <div class="flex-1">
               <div class="flex items-center gap-3 mb-2">
-                {experience.logo && (
-                  <img 
-                    src={experience.logo} 
-                    alt={`${experience.organization} logo`}
-                    class="w-8 h-8 rounded object-cover"
-                    loading="lazy"
-                  />
-                )}
                 <div class="flex items-center gap-2">
                   <span class={`inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium ${
                     experience.type === 'work' 
@@ -190,7 +182,7 @@ function getEmploymentTypeColor(employmentType?: string): string {
               {experience.skills && experience.skills.length > 0 && (
                 <div class="flex flex-wrap gap-2">
                   {experience.skills.map((skill) => (
-                    <span class="text-xs px-2 py-1 bg-accent/20 text-accent-foreground rounded-full border border-accent/30 font-medium">
+                    <span class="text-xs px-2 py-1 bg-accent/20 text-accent-foreground rounded-full border border-accent font-medium shadow-sm bg-white/80 dark:bg-black/30">
                       {skill}
                     </span>
                   ))}
